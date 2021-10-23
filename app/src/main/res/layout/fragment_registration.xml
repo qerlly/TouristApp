@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background_form"
+    tools:context=".application.startup.RegistrationFragment">
+
+    <TextView
+        android:id="@+id/loginWelcomeText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:text="@string/registration"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/inputLogin"
+        app:layout_constraintTop_toBottomOf="@id/loginWelcomeText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="10dp"
+        android:background="@null"
+        android:hint="@string/login"
+        android:imeOptions="actionNext"
+        android:paddingStart="60dp"
+        android:paddingEnd="10dp"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <View
+        android:id="@+id/viewDividerForLogin"
+        app:layout_constraintTop_toBottomOf="@id/inputLogin"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="35dp"
+        android:background="@color/hint" />
+
+    <ImageView
+        app:layout_constraintBottom_toBottomOf="@id/inputLogin"
+        app:layout_constraintStart_toStartOf="@id/inputLogin"
+        app:tint="@color/hint"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="10dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_baseline_person_24" />
+
+    <EditText
+        android:id="@+id/inputPassword"
+        app:layout_constraintTop_toBottomOf="@id/viewDividerForLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="10dp"
+        android:background="@null"
+        android:hint="@string/password"
+        android:imeOptions="actionNext"
+        android:inputType="textPassword"
+        android:paddingStart="60dp"
+        android:paddingEnd="10dp"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <View
+        android:id="@+id/viewDividerForPassword"
+        app:layout_constraintTop_toBottomOf="@id/inputPassword"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="35dp"
+        android:background="@color/hint" />
+
+    <ImageView
+        app:layout_constraintBottom_toBottomOf="@id/inputPassword"
+        app:layout_constraintStart_toStartOf="@id/inputPassword"
+        app:tint="@color/hint"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="10dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_baseline_lock_24" />
+
+    <EditText
+        android:id="@+id/inputRePassword"
+        app:layout_constraintTop_toBottomOf="@id/viewDividerForPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="10dp"
+        android:background="@null"
+        android:hint="@string/repassword"
+        android:imeOptions="actionNext"
+        android:inputType="textPassword"
+        android:paddingStart="60dp"
+        android:paddingEnd="10dp"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <View
+        android:id="@+id/viewDividerForRePassword"
+        app:layout_constraintTop_toBottomOf="@id/inputRePassword"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="35dp"
+        android:background="@color/hint" />
+
+    <ImageView
+        app:layout_constraintBottom_toBottomOf="@id/inputRePassword"
+        app:layout_constraintStart_toStartOf="@id/inputRePassword"
+        app:tint="@color/hint"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="10dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_baseline_lock_24" />
+
+    <Button
+        android:id="@+id/signUnButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewDividerForRePassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/rounded_button_background"
+        android:text="@string/sign_up"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
