@@ -1,12 +1,14 @@
 <resources>
-    <string name="app_name">Aplikacja turystyczna</string>
-    <string name="app_title">ZPI test</string>
+    <string name="app_name">Travel scope</string>
+    <string name="app_title">The app for the journey of your dreams</string>
     <string name="welcome">Welcome</string>
+    <string name="reset">Reset password</string>
     <string name="registration">Registration</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="repassword">Repeat password</string>
     <string name="sign_in">Sign In</string>
+    <string name="send">Send</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="sign_up">Sign Up</string>
     <string name="title_activity_splash">SplashActivity</string>
@@ -21,4 +23,23 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main">MainActivity</string>
+
+
+    //startup
+    <string name="login_network_error">login_network_error</string>
+    <string name="login_unknown_error">login_unknown_error</string>
+    <string name="login_email">login_email</string>
+    <string name="login_password">login_password</string>
+    <string name="login_email_invalid">login_email_invalid</string>
+    <string name="login_email_unknown">login_email_unknown</string>
+    <string name="login_password_empty">login_password_empty</string>
+    <string name="login_password_not_valid">login_password_not_valid</string>
+
+    //main
+    <string name="roadmap_title">roadmap_title</string>
+    <string name="tour_title">tour_title</string>
+    <string name="chat_title">chat_title</string>
+    <string name="search_tour">search_tour</string>
+    <string name="only_own">Only own</string>
+
 </resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_roadmap"
+        android:icon="@drawable/track"
+        android:title="@string/roadmap_title" />
+
+    <item
+        android:id="@+id/navigation_tour"
+        android:icon="@drawable/travel"
+        android:title="@string/tour_title" />
+
+    <item
+        android:id="@+id/navigation_chat"
+        android:icon="@drawable/chat"
+        android:title="@string/chat_title" />
+
+</menu>

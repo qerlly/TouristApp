@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/navigation_tour">
+    <fragment
+        android:id="@+id/navigation_tour"
+        android:name="com.qerlly.touristapp.application.main.ToursFragment"
+        android:label="fragment_tours"
+        tools:layout="@layout/fragment_tours" />
+    <fragment
+        android:id="@+id/navigation_chat"
+        android:name="com.qerlly.touristapp.application.main.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" />
+    <fragment
+        android:id="@+id/navigation_roadmap"
+        android:name="com.qerlly.touristapp.application.main.RoadmapFragment"
+        android:label="fragment_roadmap"
+        tools:layout="@layout/fragment_roadmap" />
+    <fragment
+        android:id="@+id/navigation_pref"
+        android:name="com.qerlly.touristapp.application.main.PrefFragment"
+        android:label="fragment_pref"
+        tools:layout="@layout/fragment_pref" />
+    <fragment
+        android:id="@+id/navigation_faq"
+        android:name="com.qerlly.touristapp.application.main.FAQFragment"
+        android:label="fragment_faq"
+        tools:layout="@layout/fragment_faq" />
+</navigation>

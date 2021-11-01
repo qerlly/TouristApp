@@ -5,15 +5,27 @@
       <map>
         <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/drawable-v24/header_layer.xml" value="0.2101851851851852" />
         <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/drawable-v24/ic_baseline_lock_24.xml" value="0.2101851851851852" />
+        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/drawable-v24/ic_baseline_person_24.xml" value="0.2203125" />
+        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/drawable-v24/login_background_form.xml" value="0.1125" />
         <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/drawable-v24/rounded_button_background.xml" value="0.21574074074074073" />
         <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/drawable-v24/rounded_transparent_button_background.xml" value="0.21574074074074073" />
+        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.2203125" />
+        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1125" />
         <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/layout/activity_login.xml" value="0.1213768115942029" />
         <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/layout/content_main.xml" value="0.1" />
-        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/layout/fragment_forgot_password.xml" value="0.1" />
-        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/layout/fragment_login.xml" value="0.1" />
+        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/layout/fragment_chat.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/layout/fragment_faq.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/layout/fragment_forgot_password.xml" value="0.33" />
+        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/layout/fragment_login.xml" value="0.33" />
+        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/layout/fragment_pref.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/layout/fragment_registration.xml" value="0.22" />
+        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/layout/fragment_roadmap.xml" value="0.19010416666666666" />
+        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/layout/fragment_tours.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/layout/startup_main.xml" value="0.2" />
+        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/layout/tour_list_view.xml" value="0.33" />
+        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/dmtrq/Desktop/TouristApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1125" />
       </map>
     </option>
   </component>

@@ -14,127 +14,83 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="55dp"
         android:text="@string/registration"
+        android:fontFamily="serif"
         android:textColor="@color/black"
         android:textSize="25sp"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/inputLogin"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/reg_email_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/login_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/loginWelcomeText"
+        app:layout_constraintVertical_bias="0">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/reg_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/reg_password_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="10dp"
-        android:background="@null"
-        android:hint="@string/login"
-        android:imeOptions="actionNext"
-        android:paddingStart="60dp"
-        android:paddingEnd="10dp"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/login_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reg_email_layout"
+        app:passwordToggleEnabled="true">
 
-    <View
-        android:id="@+id/viewDividerForLogin"
-        app:layout_constraintTop_toBottomOf="@id/inputLogin"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="35dp"
-        android:background="@color/hint" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/reg_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:imeOptions="actionDone"/>
 
-    <ImageView
-        app:layout_constraintBottom_toBottomOf="@id/inputLogin"
-        app:layout_constraintStart_toStartOf="@id/inputLogin"
-        app:tint="@color/hint"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="10dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/ic_baseline_person_24" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/inputPassword"
-        app:layout_constraintTop_toBottomOf="@id/viewDividerForLogin"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/reg_repassword_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="10dp"
-        android:background="@null"
-        android:hint="@string/password"
-        android:imeOptions="actionNext"
-        android:inputType="textPassword"
-        android:paddingStart="60dp"
-        android:paddingEnd="10dp"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/login_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reg_password_layout"
+        app:passwordToggleEnabled="true">
 
-    <View
-        android:id="@+id/viewDividerForPassword"
-        app:layout_constraintTop_toBottomOf="@id/inputPassword"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="35dp"
-        android:background="@color/hint" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/reg_repassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:imeOptions="actionDone"/>
 
-    <ImageView
-        app:layout_constraintBottom_toBottomOf="@id/inputPassword"
-        app:layout_constraintStart_toStartOf="@id/inputPassword"
-        app:tint="@color/hint"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="10dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/ic_baseline_lock_24" />
-
-    <EditText
-        android:id="@+id/inputRePassword"
-        app:layout_constraintTop_toBottomOf="@id/viewDividerForPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="10dp"
-        android:background="@null"
-        android:hint="@string/repassword"
-        android:imeOptions="actionNext"
-        android:inputType="textPassword"
-        android:paddingStart="60dp"
-        android:paddingEnd="10dp"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
-
-    <View
-        android:id="@+id/viewDividerForRePassword"
-        app:layout_constraintTop_toBottomOf="@id/inputRePassword"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="35dp"
-        android:background="@color/hint" />
-
-    <ImageView
-        app:layout_constraintBottom_toBottomOf="@id/inputRePassword"
-        app:layout_constraintStart_toStartOf="@id/inputRePassword"
-        app:tint="@color/hint"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="10dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/ic_baseline_lock_24" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/signUnButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewDividerForRePassword"
+        app:layout_constraintTop_toBottomOf="@id/reg_repassword_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
