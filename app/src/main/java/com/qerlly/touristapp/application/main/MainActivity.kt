@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private val MIN_DIST: Float = 3.0f;//METERS
     private val TAG = "MainActivity"
     private lateinit var navController: NavController
-    private lateinit var mgr: LocationManager
+    lateinit var mgr: LocationManager
     private lateinit var criteria: Criteria
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
