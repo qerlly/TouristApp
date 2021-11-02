@@ -1,6 +1,7 @@
 package com.qerlly.touristapp.application.startup
 
 import android.content.Intent
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.first
 class StartupActivity : AppCompatActivity() {
 
     private val startupViewModel: StartupViewModel by viewModels()
-
+    private lateinit var mgr: LocationManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         /*lifecycleScope.launchWhenCreated {
@@ -26,6 +27,8 @@ class StartupActivity : AppCompatActivity() {
                 startMainActivity()
             }
         }*/
+        startMainActivity()
+        mgr = getSystemService(LOCATION_SERVICE) as LocationManager
     }
 
     private fun startMainActivity() {

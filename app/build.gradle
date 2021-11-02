@@ -87,4 +87,8 @@ dependencies {
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    //osm
+    implementation 'org.osmdroid:osmdroid-android:6.1.8'
+    implementation 'org.slf4j:slf4j-android:1.7.32'
 }

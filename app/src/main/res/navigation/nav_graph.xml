@@ -3,26 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/mapPointsFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.qerlly.touristapp.FirstFragment"
+        android:id="@+id/testFragment"
+        android:name="com.qerlly.touristapp.application.main.TestFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+        tools:layout="@layout/fragment_test">
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.qerlly.touristapp.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-    </fragment>
+        android:id="@+id/mapPointsFragment"
+        android:name="com.qerlly.touristapp.application.main.MapPointsFragment"
+        android:label="map_points_fragment"
+        tools:layout="@layout/map_points_fragment" />
 </navigation>
