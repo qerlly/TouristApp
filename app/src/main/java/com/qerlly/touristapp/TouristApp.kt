@@ -1,6 +1,7 @@
 package com.qerlly.touristapp
 
 import android.app.Application
+import androidx.viewbinding.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 

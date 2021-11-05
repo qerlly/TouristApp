@@ -11,9 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import com.qerlly.touristapp.application.main.adapters.FaqListAdapter
 import com.qerlly.touristapp.application.main.viewmodels.FaqViewModel
 import com.qerlly.touristapp.databinding.FragmentFaqBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class FAQFragment : Fragment() {
 
     private var binding: FragmentFaqBinding? = null
