@@ -1,6 +1,6 @@
 package com.qerlly.touristapp.infrastructure.retrofit
 
-import com.qerlly.touristapp.model.Token
+import com.qerlly.touristapp.model.user.Token
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

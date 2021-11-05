@@ -41,5 +41,19 @@
     <string name="chat_title">chat_title</string>
     <string name="search_tour">search_tour</string>
     <string name="only_own">Only own</string>
+    <string name="enter_message">Enter Message</string>
+    <string name="name">Full name</string>
+    <string name="change">Change</string>
+    <string name="phone_number">Phone number</string>
+    <string name="e_mail">E-mail</string>
+    <string name="location">Location</string>
+    <string name="localiz_access">Do you want to give access to your localization to other participants of the tour?</string>
+    <string name="faq_1">1. How to turn off location?</string>
+    <string name="faq_1_text">Is this content dynamically downloaded?</string>
+    <string name="faq_1_answer">Yes. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <string name="faq_2_text">Is this content dynamically downloaded?</string>
+    <string name="faq_2_answer">Yes. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
+    <string name="faq_3_text">Is this content dynamically downloaded?</string>
+    <string name="faq_3_answer">Yes. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
 
 </resources>

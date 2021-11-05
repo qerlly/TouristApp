@@ -7,26 +7,26 @@
     <fragment
         android:id="@+id/navigation_tour"
         android:name="com.qerlly.touristapp.application.main.ToursFragment"
-        android:label="fragment_tours"
+        android:label="Tours"
         tools:layout="@layout/fragment_tours" />
     <fragment
         android:id="@+id/navigation_chat"
         android:name="com.qerlly.touristapp.application.main.ChatFragment"
-        android:label="fragment_chat"
+        android:label="Chat"
         tools:layout="@layout/fragment_chat" />
     <fragment
         android:id="@+id/navigation_roadmap"
         android:name="com.qerlly.touristapp.application.main.RoadmapFragment"
-        android:label="fragment_roadmap"
+        android:label="Roadmap"
         tools:layout="@layout/fragment_roadmap" />
     <fragment
         android:id="@+id/navigation_pref"
         android:name="com.qerlly.touristapp.application.main.PrefFragment"
-        android:label="fragment_pref"
+        android:label="User settings"
         tools:layout="@layout/fragment_pref" />
     <fragment
         android:id="@+id/navigation_faq"
         android:name="com.qerlly.touristapp.application.main.FAQFragment"
-        android:label="fragment_faq"
+        android:label="FAQ"
         tools:layout="@layout/fragment_faq" />
 </navigation>

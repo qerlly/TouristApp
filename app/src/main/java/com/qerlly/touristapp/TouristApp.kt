@@ -13,11 +13,8 @@ class TouristApp: Application() {
     }
 
     private fun initTimber() {
-        val tree = if (BuildConfig.DEBUG) {
-            Timber.DebugTree()
-        } else {
-            CrashlyticsTimberTree()
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
         }
-        Timber.plant(tree)
     }
 }
