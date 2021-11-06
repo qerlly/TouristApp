@@ -23,9 +23,6 @@ import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.Polyline
 
-
-
-
 class MapPointsFragment : Fragment() {
     private lateinit var mapView: MapView
     private lateinit var mapController: MapController
