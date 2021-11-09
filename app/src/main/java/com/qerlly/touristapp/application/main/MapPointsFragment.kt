@@ -14,14 +14,15 @@ import androidx.core.app.ActivityCompat
 import com.qerlly.touristapp.BuildConfig
 import com.qerlly.touristapp.R
 import com.qerlly.touristapp.databinding.MapPointsFragmentBinding
+import org.osmdroid.tileprovider.MapTileProviderBase
+import org.osmdroid.tileprovider.MapTileProviderBasic
 import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants
+import org.osmdroid.tileprovider.tilesource.ITileSource
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapController
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.IconOverlay
-import org.osmdroid.views.overlay.Overlay
-import org.osmdroid.views.overlay.OverlayItem
-import org.osmdroid.views.overlay.Polyline
+import org.osmdroid.views.overlay.*
 
 class MapPointsFragment : Fragment() {
     private lateinit var mapView: MapView
@@ -67,6 +68,17 @@ class MapPointsFragment : Fragment() {
             // for ActivityCompat#requestPermissions for more details.
             return
         }
+        val mProvider = MapTileProviderBasic(requireContext());
+
+//Tiles
+
+        mProvider.setTileSource(TileSourceFactory.FIETS_OVERLAY_NL);
+
+
+
+        val mTilesOverlay = TilesOverlay(mProvider, requireContext());
+
+        mapView.getOverlays().add(mTilesOverlay);
         val location = (activity as MainActivity).mgr.getLastKnownLocation((activity as MainActivity).mgr.allProviders.get(0))
         if (location != null) {
             val icon = IconOverlay()
@@ -85,14 +97,17 @@ class MapPointsFragment : Fragment() {
             line.isGeodesic = true
             mapView.overlays.add(line)
             mapView.overlays.add(icon)
-            val polyline = Polyline(mapView, false)
-            /*polyline.isGeodesic = false*/
+
+
+
+            /*val polyline = Polyline(mapView, false)
+            *//*polyline.isGeodesic = false*//*
             polyline.actualPoints.add(GeoPoint(51.0988449, 17.0354319))
             polyline.actualPoints.add(GeoPoint(location.latitude, location.longitude))
             polyline.color = Color.RED
             polyline.width = 2f
             polyline.isGeodesic = true
-            mapView.overlays.add(polyline)
+            mapView.overlays.add(polyline)*/
 
             /*val lineP = Polyline()
             line.width = 20f
