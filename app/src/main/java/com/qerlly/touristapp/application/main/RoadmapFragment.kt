@@ -1,33 +1,41 @@
 package com.qerlly.touristapp.application.main
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.viewModels
+import com.qerlly.touristapp.BuildConfig
 import com.qerlly.touristapp.R
+import com.qerlly.touristapp.application.main.viewmodels.FaqViewModel
+import com.qerlly.touristapp.application.main.viewmodels.RoadmapViewModel
+import com.qerlly.touristapp.databinding.FragmentFaqBinding
+import com.qerlly.touristapp.databinding.FragmentRoadmapBinding
+import dagger.hilt.android.AndroidEntryPoint
+import org.osmdroid.tileprovider.MapTileProviderBasic
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapController
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.IconOverlay
+import org.osmdroid.views.overlay.OverlayItem
+import org.osmdroid.views.overlay.Polyline
+import org.osmdroid.views.overlay.TilesOverlay
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [RoadmapFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class RoadmapFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var binding: FragmentRoadmapBinding? = null
+    private lateinit var mapView: MapView
+    private lateinit var mapController: MapController
 
+    private val viewModel: RoadmapViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -35,26 +43,96 @@ class RoadmapFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_roadmap, container, false)
+        binding = FragmentRoadmapBinding.inflate(layoutInflater)
+        //prepareMap()
+        return binding!!.root
+    }
+/*    private fun prepareMap(){
+        mapView = binding!!.mapView
+        mapView.setBuiltInZoomControls(true)
+        mapView.setMultiTouchControls(true)
+        mapController = mapView.controller as MapController
+        mapController.setZoom(19)
+        org.osmdroid.config.Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
+
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        val mProvider = MapTileProviderBasic(requireContext());
+
+//Tiles
+
+        mProvider.setTileSource(TileSourceFactory.FIETS_OVERLAY_NL);
+
+
+
+        val mTilesOverlay = TilesOverlay(mProvider, requireContext());
+
+        mapView.getOverlays().add(mTilesOverlay);
+        val location = (activity as MainActivity).mgr.getLastKnownLocation((activity as MainActivity).mgr.allProviders.get(0))
+        if (location != null) {
+            val icon = IconOverlay()
+            icon.set(GeoPoint(location.latitude, location.longitude), resources.getDrawable(R.drawable.ic_baseline_location_on_24))
+
+            mapController.setCenter(GeoPoint(location.latitude, location.longitude))
+            val overlays = mutableListOf<OverlayItem>()
+            overlays.add(OverlayItem("new Overlay", "OverlayDescription", GeoPoint(location.latitude, location.longitude)))
+            val line = Polyline()
+            line.width = 2f
+            line.color = Color.BLACK
+            val pts: MutableList<GeoPoint> = ArrayList()
+            pts.add(GeoPoint(location.latitude, location.longitude))
+            pts.add(GeoPoint(51.0988449, 17.0354319))
+            line.setPoints(pts)
+            line.isGeodesic = true
+            mapView.overlays.add(line)
+            mapView.overlays.add(icon)
+
+
+
+            *//*val polyline = Polyline(mapView, false)
+            *//**//*polyline.isGeodesic = false*//**//*
+            polyline.actualPoints.add(GeoPoint(51.0988449, 17.0354319))
+            polyline.actualPoints.add(GeoPoint(location.latitude, location.longitude))
+            polyline.color = Color.RED
+            polyline.width = 2f
+            polyline.isGeodesic = true
+            mapView.overlays.add(polyline)*//*
+
+            *//*val lineP = Polyline()
+            line.width = 20f
+            val pts: MutableList<GeoPoint> = ArrayList()
+            pts.add(GeoPoint(40.796788, -73.949232))
+            pts.add(GeoPoint(40.796788, -73.981762))
+            line.setPoints(pts)
+            line.isGeodesic = true
+            mapView.getOverlayManager().add(line)*//*
+        }
+    }*/
+
+    override fun onDestroy() {
+        binding = null
+        super.onDestroy()
     }
 
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment RoadmapFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
         fun newInstance(param1: String, param2: String) =
             RoadmapFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
             }
     }
 }
