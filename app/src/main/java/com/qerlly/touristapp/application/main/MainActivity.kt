@@ -62,9 +62,14 @@ class MainActivity : AppCompatActivity(), LocationListener {
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
         binding.setupToolbar(navController)
-        setContentView(R.layout.activity_main)
+        /*setContentView(R.layout.activity_main)*/
         prepareNav()
     }
+
+    override fun onLocationChanged(location: Location) {
+        Log.d(TAG, location.latitude.toString() + " " + location.longitude)
+    }
+
 
     override fun onSupportNavigateUp(): Boolean {
         val fc = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -319,9 +324,5 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
             }
         }
-    }
-
-    override fun onLocationChanged(location: Location) {
-        Log.d(TAG, location.latitude.toString() + " " + location.longitude)
     }
 }

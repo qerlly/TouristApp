@@ -44,10 +44,10 @@ class RoadmapFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentRoadmapBinding.inflate(layoutInflater)
-        //prepareMap()
+        prepareMap()
         return binding!!.root
     }
-/*    private fun prepareMap(){
+    private fun prepareMap(){
         mapView = binding!!.mapView
         mapView.setBuiltInZoomControls(true)
         mapView.setMultiTouchControls(true)
@@ -76,7 +76,7 @@ class RoadmapFragment : Fragment() {
 
 //Tiles
 
-        mProvider.setTileSource(TileSourceFactory.FIETS_OVERLAY_NL);
+        mProvider.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
 
 
 
@@ -104,25 +104,25 @@ class RoadmapFragment : Fragment() {
 
 
 
-            *//*val polyline = Polyline(mapView, false)
-            *//**//*polyline.isGeodesic = false*//**//*
+            val polyline = Polyline(mapView, false)
+            polyline.isGeodesic = false
             polyline.actualPoints.add(GeoPoint(51.0988449, 17.0354319))
             polyline.actualPoints.add(GeoPoint(location.latitude, location.longitude))
             polyline.color = Color.RED
             polyline.width = 2f
             polyline.isGeodesic = true
-            mapView.overlays.add(polyline)*//*
+            mapView.overlays.add(polyline)
 
-            *//*val lineP = Polyline()
+            /*val lineP = Polyline()
             line.width = 20f
             val pts: MutableList<GeoPoint> = ArrayList()
             pts.add(GeoPoint(40.796788, -73.949232))
             pts.add(GeoPoint(40.796788, -73.981762))
             line.setPoints(pts)
             line.isGeodesic = true
-            mapView.getOverlayManager().add(line)*//*
+            mapView.getOverlayManager().add(line)*/
         }
-    }*/
+    }
 
     override fun onDestroy() {
         binding = null
