@@ -23,7 +23,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationBarView
 import com.qerlly.touristapp.R
 import com.qerlly.touristapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,7 +51,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_roadmap,
+                R.id.points_list,
                 R.id.navigation_tour,
                 R.id.navigation_chat
             )
