@@ -5,6 +5,7 @@ import android.content.Context
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import androidx.core.content.getSystemService
+import com.qerlly.touristapp.model.point.PointsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,4 +27,8 @@ object AndroidHiltModule {
     @Provides
     fun provideConnectivityManager(@ApplicationContext context: Context): ConnectivityManager =
         context.getSystemService()!!
+
+    @Provides
+    fun providePointsRepository(@ApplicationContext context: Context): PointsRepository =
+        PointsRepository()
 }

@@ -2,8 +2,8 @@ package com.qerlly.touristapp.application.main.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.qerlly.touristapp.application.main.widgets.FaqEntryCardModel
-import com.qerlly.touristapp.model.faq.FaqEntryRepository
+import com.qerlly.touristapp.application.main.widgets.CloseOpenCardModel
+import com.qerlly.touristapp.model.point.PointsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -11,38 +11,38 @@ import javax.inject.Inject
 @HiltViewModel
 
 class PointsViewModel
-    @Inject constructor(faqEntryRepository: FaqEntryRepository) : ViewModel() {
+    @Inject constructor(pointsRepository: PointsRepository) : ViewModel() {
 
     private val openedCardIds: MutableStateFlow<Set<String>> = MutableStateFlow(setOf())
 
-    val faqState: StateFlow<List<FaqEntryCardModel>?> =
-        faqEntryRepository.getAll().combine(openedCardIds) { faqEntries, openedEntriesIds ->
+    val faqState: StateFlow<List<CloseOpenCardModel>?> =
+        pointsRepository.getAll().combine(openedCardIds) { faqEntries, openedEntriesIds ->
             faqEntries.map { faqEntry ->
                 val opened = faqEntry.id in openedEntriesIds
-                FaqEntryCardModel(faqEntry, opened)
+                CloseOpenCardModel(faqEntry, opened)
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    fun onCardClicked(faqEntryCardModel: FaqEntryCardModel) {
-        if (faqEntryCardModel.expanded) {
-            closeCard(faqEntryCardModel)
-        } else openCard(faqEntryCardModel)
+    fun onCardClicked(closeOpenCardModel: CloseOpenCardModel) {
+        if (closeOpenCardModel.expanded) {
+            closeCard(closeOpenCardModel)
+        } else openCard(closeOpenCardModel)
     }
 
-    private fun openCard(faqEntryCardModel: FaqEntryCardModel) {
-        manipulateOpenedCardIds(faqEntryCardModel, MutableSet<String>::add)
+    private fun openCard(closeOpenCardModel: CloseOpenCardModel) {
+        manipulateOpenedCardIds(closeOpenCardModel, MutableSet<String>::add)
     }
 
-    private fun closeCard(faqEntryCardModel: FaqEntryCardModel) {
-        manipulateOpenedCardIds(faqEntryCardModel, MutableSet<String>::remove)
+    private fun closeCard(closeOpenCardModel: CloseOpenCardModel) {
+        manipulateOpenedCardIds(closeOpenCardModel, MutableSet<String>::remove)
     }
 
     private fun manipulateOpenedCardIds(
-        faqEntryCardModel: FaqEntryCardModel,
+        closeOpenCardModel: CloseOpenCardModel,
         operation: MutableSet<String>.(String) -> Unit,
     ) {
         openedCardIds.value = openedCardIds.value.toMutableSet().apply {
-            operation(faqEntryCardModel.faqEntry.id)
+            operation(closeOpenCardModel.closeOpenModel.id)
         }
     }
 }
