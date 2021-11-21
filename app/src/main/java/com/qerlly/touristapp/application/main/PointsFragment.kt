@@ -18,9 +18,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import androidx.recyclerview.widget.LinearLayoutManager
 
-
-
-
 @AndroidEntryPoint
 class PointsFragment : Fragment() {
     private var binding: PointsFragmentBinding? = null
