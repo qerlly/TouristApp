@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.qerlly.touristapp.model.openclose.CloseOpenModel
 
-@Entity(tableName = "faqs")
+@Entity(tableName = "questions")
 data class FaqEntry(
     @PrimaryKey override var id: String,
     override var textOnOpen: String,
