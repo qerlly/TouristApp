@@ -1,8 +1,10 @@
 package com.qerlly.touristapp.application.main.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.qerlly.touristapp.application.main.widgets.CloseOpenCardModel
+import com.qerlly.touristapp.model.point.Point
 import com.qerlly.touristapp.model.point.PointsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -15,13 +17,16 @@ class PointsViewModel
 
     private val openedCardIds: MutableStateFlow<Set<String>> = MutableStateFlow(setOf())
 
-    val faqState: StateFlow<List<CloseOpenCardModel>?> =
+    val pointsNameDesc: StateFlow<List<CloseOpenCardModel>?> =
         pointsRepository.getAll().combine(openedCardIds) { faqEntries, openedEntriesIds ->
             faqEntries.map { faqEntry ->
                 val opened = faqEntry.id in openedEntriesIds
                 CloseOpenCardModel(faqEntry, opened)
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+    val pointsCoordinates: StateFlow<List<Point>?> =
+        pointsRepository.getAll()
 
     fun onCardClicked(closeOpenCardModel: CloseOpenCardModel) {
         if (closeOpenCardModel.expanded) {

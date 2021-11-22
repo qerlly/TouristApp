@@ -6,6 +6,6 @@ data class Point(
     override var id: String,
     override var textOnOpen: String,
     override var textOnClosed: String,
-    private var lat: Double,
-    private var long: Double,
+    var lat: Double,
+    var long: Double,
 ) : CloseOpenModel(id, textOnOpen, textOnOpen)
