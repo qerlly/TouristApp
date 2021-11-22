@@ -82,6 +82,7 @@ class PointsFragment : Fragment() {
                 _bind?.mapView!!.overlays.add(icon)
             }
         }
+        mapController!!.setCenter(GeoPoint(pts.get(0).latitude, pts.get(0).longitude))
     }
 
     override fun onDestroy() {
