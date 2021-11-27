@@ -3,8 +3,9 @@ package com.qerlly.touristapp.application.startup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.qerlly.touristapp.infrastructure.retrofit.MainService
+import com.qerlly.touristapp.model.web.GenerateTokenData
 import com.qerlly.touristapp.model.web.RegistrationDataModel
-import com.qerlly.touristapp.model.web.RegistrationResponseModel
+import com.qerlly.touristapp.model.web.RegistrationRequestModel
 import com.qerlly.touristapp.services.AuthenticationService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.SingleObserver
@@ -43,8 +44,12 @@ class StartupViewModel @Inject constructor(
         }
     }
 
+    fun login(){
+        mainService.generateToken(GenerateTokenData("testtest1", "hashedPassword"))
+    }
+
     fun register(){
-        val mySubscriber = object: SingleObserver<RegistrationResponseModel> {
+        val mySubscriber = object: SingleObserver<RegistrationRequestModel> {
             override fun onError(e: Throwable) {
                 println("onError")
             }
@@ -52,7 +57,7 @@ class StartupViewModel @Inject constructor(
             override fun onSubscribe(s: Disposable) {
                 println("onSubscribe")
             }
-            override fun onSuccess(t: RegistrationResponseModel) {
+            override fun onSuccess(t: RegistrationRequestModel) {
                 println("success")
             }
         }
@@ -65,10 +70,10 @@ class StartupViewModel @Inject constructor(
 
         }*/
         mainService.registration(
-            RegistrationDataModel("aliaksei0011anishchanka@gmail.com",
-            "anishchanka112",
-            "aliaksei1",
-            "anishchanka1",
+            RegistrationDataModel("testtest111@gmail.com",
+            "testtest111",
+            "aliaksei",
+            "anishchanka",
                 "hashedPassword",
                 "hashedPassword")).subscribe(mySubscriber)
     }
