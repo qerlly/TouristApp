@@ -12,7 +12,8 @@ import com.qerlly.touristapp.databinding.StartupMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class StartupActivity : AppCompatActivity() {
+class
+StartupActivity : AppCompatActivity() {
 
     private lateinit var binding: StartupMainBinding
 

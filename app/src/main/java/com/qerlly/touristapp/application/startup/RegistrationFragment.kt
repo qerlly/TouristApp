@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.qerlly.touristapp.databinding.FragmentRegistrationBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RegistrationFragment : Fragment() {
 
     private var binding: FragmentRegistrationBinding? = null
@@ -23,12 +25,10 @@ class RegistrationFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-       /* binding?.apply {
-            viewModel.tours
-                .onEach {
-                }
-                .launchIn(lifecycleScope)
-        }*/
+        binding?.apply {
+            signUnButton.setOnClickListener {
+                viewModel.register() }
+        }
     }
 
     override fun onDestroy() {
