@@ -26,4 +26,7 @@ interface MainService {
 
     @POST("api/token/")
     fun generateToken(@Body generateTokenData: GenerateTokenData): Single<List<Tour>>
+
+    @GET("/api/tour/{id}/")
+    fun getTour(@Path("id") id: Int): Single<Tour>
 }

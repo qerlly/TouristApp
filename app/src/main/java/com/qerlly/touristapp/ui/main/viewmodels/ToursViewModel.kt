@@ -22,6 +22,21 @@ class ToursViewModel @Inject constructor(
 
 ) : ViewModel() {
     val tours = MutableStateFlow<List<Tour>?>(null)
+    fun getTour(id: Int = 1){
+        mainService.getTour(id).subscribe(object : SingleObserver<Tour> {
+            override fun onError(e: Throwable) {
+                println("onError")
+            }
+
+            override fun onSubscribe(s: Disposable) {
+                println("onSubscribe")
+            }
+
+            override fun onSuccess(t: Tour) {
+                println("success")
+            }
+        })
+    }
     fun getTours(){
         mainService.getTours().subscribe(object : SingleObserver<List<Tour>> {
             override fun onError(e: Throwable) {

@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         binding.setupToolbar(navController)
         /*setContentView(R.layout.activity_main)*/
         prepareNav()
+        setUpGPS()
     }
 
     override fun onLocationChanged(location: Location) {
