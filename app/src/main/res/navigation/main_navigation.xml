@@ -6,22 +6,22 @@
     app:startDestination="@id/points_list">
     <fragment
         android:id="@+id/navigation_tour"
-        android:name="com.qerlly.touristapp.application.main.ToursFragment"
+        android:name="com.qerlly.touristapp.ui.main.ToursFragment"
         android:label="Tours"
         tools:layout="@layout/fragment_tours" />
     <fragment
         android:id="@+id/navigation_chat"
-        android:name="com.qerlly.touristapp.application.main.ChatFragment"
+        android:name="com.qerlly.touristapp.ui.main.ChatFragment"
         android:label="Chat"
         tools:layout="@layout/fragment_chat" />
     <fragment
         android:id="@+id/navigation_pref"
-        android:name="com.qerlly.touristapp.application.main.PrefFragment"
+        android:name="com.qerlly.touristapp.ui.main.PrefFragment"
         android:label="User settings"
         tools:layout="@layout/fragment_pref" />
     <fragment
         android:id="@+id/navigation_faq"
-        android:name="com.qerlly.touristapp.application.main.FAQFragment"
+        android:name="com.qerlly.touristapp.ui.main.FAQFragment"
         android:label="FAQ"
         tools:layout="@layout/fragment_faq" />
     <fragment

@@ -1,9 +1,8 @@
 package com.qerlly.touristapp.infrastructure.retrofit
 
+import com.qerlly.touristapp.model.Tour
 import com.qerlly.touristapp.model.user.Token
-import com.qerlly.touristapp.model.web.GenerateTokenData
-import com.qerlly.touristapp.model.web.RegistrationDataModel
-import com.qerlly.touristapp.model.web.RegistrationRequestModel
+import com.qerlly.touristapp.model.web.*
 import io.reactivex.rxjava3.core.Single
 
 import retrofit2.Response
@@ -17,11 +16,14 @@ interface MainService {
     @GET("users/{userId}.json")
     suspend fun getUser(@Path("userId") userId: Int): Response<Token>
 
+    @GET("api/tour/")
+    fun getTours(): Single<List<Tour>>
+
     @POST("api/user/registration/")
     fun registration(
         @Body registrationModel: RegistrationDataModel
     ): Single<RegistrationRequestModel>
 
     @POST("api/token/")
-    fun generateToken(@Body generateTokenData: GenerateTokenData)
+    fun generateToken(@Body generateTokenData: GenerateTokenData): Single<List<Tour>>
 }

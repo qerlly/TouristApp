@@ -6,10 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.qerlly.touristapp.databinding.FragmentToursBinding
 import com.qerlly.touristapp.ui.main.adapters.ToursListAdapter
 import com.qerlly.touristapp.ui.main.viewmodels.ToursViewModel
-import com.qerlly.touristapp.databinding.FragmentToursBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class ToursFragment : Fragment() {
 
     private var binding: FragmentToursBinding? = null
@@ -27,14 +34,17 @@ class ToursFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        /*binding?.apply {
-            recyclerTours.adapter = this@ToursFragment.adapter
-            viewModel.tours
-                .onEach {
+        viewModel.getTours()
 
-                }
-                .launchIn(lifecycleScope)
-        }*/
+        binding?.apply {
+            recyclerTours.apply {
+                layoutManager = LinearLayoutManager(this@ToursFragment.requireContext())
+                adapter = this@ToursFragment.adapter
+            }
+            viewModel.tours.filterNotNull().onEach {
+                this@ToursFragment.adapter.differ.submitList(it)
+            }.launchIn(lifecycleScope)
+        }
     }
 
     override fun onDestroy() {

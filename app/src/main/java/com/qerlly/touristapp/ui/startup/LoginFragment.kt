@@ -117,7 +117,7 @@ class LoginFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 binding!!.signInButton.isEnabled = false
-                //startupViewModel.login(GenerateTokenData(login, password)).await()
+                startupViewModel.login()
                 //(activity as StartupActivity).startMainActivity()
             } catch (e: IllegalArgumentException) {
                 Timber.e(e)

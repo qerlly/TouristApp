@@ -46,8 +46,8 @@ class ToursListAdapter : RecyclerView.Adapter<ToursListAdapter.ToursViewHolder>(
                 .into(tour_image)
 
             tour_name.text = tour.name
-            tour_desc.text = tour.roadmap
-            tour_time.text = tour.date
+/*            tour_desc.text = tour.roadmap
+            tour_time.text = tour.date*/
             tour_card.setOnClickListener {
                 onItemClickListener?.let {
                     it(tour)
