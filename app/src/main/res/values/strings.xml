@@ -24,6 +24,7 @@
 
     //startup
     <string name="login_network_error">login_network_error</string>
+    <string name="login_data_error">login_data_error</string>
     <string name="login_unknown_error">login_unknown_error</string>
     <string name="login_email">login_email</string>
     <string name="login_password">login_password</string>

@@ -10,9 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.qerlly.touristapp.R
+import com.qerlly.touristapp.databinding.FragmentChatBinding
+import com.qerlly.touristapp.infrastructure.android.NetworkState
 import com.qerlly.touristapp.ui.main.adapters.ChatListAdapter
 import com.qerlly.touristapp.ui.main.viewmodels.ChatViewModel
-import com.qerlly.touristapp.databinding.FragmentChatBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

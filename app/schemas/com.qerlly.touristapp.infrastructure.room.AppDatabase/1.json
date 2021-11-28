@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "5f7acc7817a63acf5066c5256663f418",
+    "identityHash": "dc5c796431a00d84a8841342f5c3a2e1",
     "entities": [
       {
-        "tableName": "faqs",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `question` TEXT NOT NULL, `answer` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "tableName": "questions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `textOnOpen` TEXT NOT NULL, `textOnClosed` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -15,14 +15,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "question",
-            "columnName": "question",
+            "fieldPath": "textOnOpen",
+            "columnName": "textOnOpen",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "answer",
-            "columnName": "answer",
+            "fieldPath": "textOnClosed",
+            "columnName": "textOnClosed",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -40,7 +40,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5f7acc7817a63acf5066c5256663f418')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dc5c796431a00d84a8841342f5c3a2e1')"
     ]
   }
 }

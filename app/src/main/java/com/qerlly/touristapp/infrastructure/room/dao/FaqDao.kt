@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 abstract class FaqDao {
-    @Query("""SELECT *FROM faqs""")
+    @Query("""SELECT * FROM questions""")
     abstract fun getAll(): Flow<List<FaqEntry>>
 }

@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.qerlly.touristapp.R
-import com.qerlly.touristapp.ui.main.MainActivity
 import com.qerlly.touristapp.databinding.StartupMainBinding
+import com.qerlly.touristapp.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,9 +21,7 @@ class StartupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launchWhenCreated {
-           /* val state = startupViewModel.isUserSignedIn.first { it != AuthenticationStatus.LOADING }
-            if (state == AuthenticationStatus.NOT_AUTHENTICATED) {*/
-            if(true) {
+            if(startupViewModel.isUserSignedIn.value) {
                 inflateUI()
             } else {
                 startMainActivity()

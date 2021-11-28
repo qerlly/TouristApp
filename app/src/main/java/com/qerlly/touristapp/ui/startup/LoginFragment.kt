@@ -1,17 +1,18 @@
 package com.qerlly.touristapp.ui.startup
 
 
+import android.accounts.NetworkErrorException
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
 import com.afollestad.vvalidator.form
 import com.afollestad.vvalidator.form.Form
 import com.afollestad.vvalidator.form.FormResult
@@ -21,8 +22,6 @@ import com.qerlly.touristapp.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import androidx.core.content.getSystemService
-import androidx.navigation.fragment.NavHostFragment
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -49,7 +48,7 @@ class LoginFragment : Fragment() {
         loginForm = form {
             useRealTimeValidation(disableSubmit = true)
 
-            inputLayout(binding!!.loginEmailLayout, name = "email") {
+            inputLayout(binding!!.loginEmailLayout, name = "login") {
                 conditional(startupViewModel.loginHasBeenTried::value) {
                     isEmail().apply {
                         description(R.string.login_email_invalid)
@@ -106,68 +105,38 @@ class LoginFragment : Fragment() {
 
     private fun handleFormResult(result: FormResult) {
         lifecycleScope.launch {
-            val email = result["email"]?.asString()
+            val login = result["login"]?.asString()
             val password = result["password"]?.asString()
-            if (email != null && password != null) {
-                onLogin(email, password)
+            if (login != null && password != null) {
+                onLogin(login, password)
             }
         }
     }
 
-    private fun onLogin(email: String, password: String) {
+    private fun onLogin(login: String, password: String) {
         lifecycleScope.launch {
             try {
                 binding!!.signInButton.isEnabled = false
-                startupViewModel.onLoginAsync(email, password).await()
-                (activity as StartupActivity).startMainActivity()
-            } /*catch (e: FirebaseAuthInvalidCredentialsException) {
-                handleInvalidCredentials()
-            } catch (e: FirebaseAuthInvalidUserException) {
-                handleInvalidEmail()
-            } catch (e: FirebaseNetworkException) {
+                //startupViewModel.login(GenerateTokenData(login, password)).await()
+                //(activity as StartupActivity).startMainActivity()
+            } catch (e: IllegalArgumentException) {
+                Timber.e(e)
+                handleDataException()
+            } catch (e: NetworkErrorException) {
+                Timber.e(e)
                 handleNetworkException()
-            }*/ catch (e: IllegalArgumentException) {
-                //do nothing, handled by validation
             } catch (e: Exception) {
                 Timber.e(e)
                 handleUnknownError()
             } finally {
                 binding!!.signInButton.isEnabled = true
-                startupViewModel.loginHasBeenTried.value = true
                 loginForm?.validate()
             }
         }
     }
 
-    private fun handleInvalidCredentials() {
-        val listener = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                startupViewModel.isPasswordInvalid.value = false
-                binding!!.loginPassword.removeTextChangedListener(this)
-            }
-        }
-        startupViewModel.isPasswordInvalid.value = true
-        binding!!.loginPassword.setText("")
-        binding!!.loginPassword.addTextChangedListener(listener)
-    }
-
-    private fun handleInvalidEmail() {
-        val listener = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                startupViewModel.isInvalidEmail.value = false
-                binding!!.loginEmail.removeTextChangedListener(this)
-            }
-        }
-        startupViewModel.isInvalidEmail.value = true
-        binding!!.loginEmail.addTextChangedListener(listener)
+    private fun handleDataException() {
+        Snackbar.make(binding!!.root, R.string.login_data_error, Snackbar.LENGTH_LONG).show()
     }
 
     private fun handleNetworkException() {

@@ -1,24 +1,25 @@
 package com.qerlly.touristapp.ui.startup
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.qerlly.touristapp.services.AuthenticationService
+import com.qerlly.touristapp.infrastructure.retrofit.MainService
+import com.qerlly.touristapp.model.web.GenerateTokenData
+import com.qerlly.touristapp.model.web.RegistrationDataModel
+import com.qerlly.touristapp.model.web.RegistrationRequestModel
+import com.qerlly.touristapp.services.SettingsService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
+import io.reactivex.rxjava3.core.SingleObserver
+import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class StartupViewModel @Inject constructor(
-    private val authenticationService: AuthenticationService,
+    private val mainService: MainService,
+    private val settingsService: SettingsService,
 ) : ViewModel() {
 
- /*   val isUserSignedIn: StateFlow<AuthenticationStatus> =
-        authenticationService
-            .authenticationStatus
-            .map { if (it) Authenticated else NotAuthenticated }
-            .stateIn(viewModelScope, SharingStarted.Eagerly, Loading)*/
+    val isUserSignedIn = MutableStateFlow(false)
 
     val loginHasBeenTried = MutableStateFlow(false)
 
@@ -28,13 +29,25 @@ class StartupViewModel @Inject constructor(
 
     val isInvalidEmail = MutableStateFlow(false)
 
-    fun onLoginAsync(email: String, password: String): Deferred<Boolean> {
-        return viewModelScope.async {
-            false
-        }
+    suspend fun login(generateTokenData: GenerateTokenData) {
+        mainService.generateToken(generateTokenData)
     }
 
-    enum class AuthenticationStatus {
-        LOADING, AUTHENTICATED, NOT_AUTHENTICATED
+    fun register(registrationDataModel: RegistrationDataModel) {
+        mainService.registration(registrationDataModel).subscribe(
+            object : SingleObserver<RegistrationRequestModel> {
+                override fun onError(e: Throwable) {
+                    println("onError")
+                }
+
+                override fun onSubscribe(s: Disposable) {
+                    println("onSubscribe")
+                }
+
+                override fun onSuccess(t: RegistrationRequestModel) {
+                    runBlocking { settingsService.fetchSettings() }
+                    println("success")
+                }
+            })
     }
 }
