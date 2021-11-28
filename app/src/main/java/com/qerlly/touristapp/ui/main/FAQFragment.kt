@@ -1,4 +1,4 @@
-package com.qerlly.touristapp.application.main
+package com.qerlly.touristapp.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.qerlly.touristapp.application.main.adapters.FaqListAdapter
-import com.qerlly.touristapp.application.main.viewmodels.FaqViewModel
+import com.qerlly.touristapp.ui.main.adapters.FaqListAdapter
+import com.qerlly.touristapp.ui.main.viewmodels.FaqViewModel
 import com.qerlly.touristapp.databinding.FragmentFaqBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn

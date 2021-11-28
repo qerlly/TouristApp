@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_background_form"
-    tools:context=".application.startup.RegistrationFragment">
+    tools:context=".ui.startup.RegistrationFragment">
 
     <TextView
         android:id="@+id/loginWelcomeText"

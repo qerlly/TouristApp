@@ -1,4 +1,4 @@
-package com.qerlly.touristapp.application.main
+package com.qerlly.touristapp.ui.main
 
 import android.os.Bundle
 import android.view.View

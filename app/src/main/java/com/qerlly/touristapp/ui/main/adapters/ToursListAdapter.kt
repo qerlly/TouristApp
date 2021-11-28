@@ -1,4 +1,4 @@
-package com.qerlly.touristapp.application.main.adapters
+package com.qerlly.touristapp.ui.main.adapters
 
 import android.view.LayoutInflater
 import android.view.View

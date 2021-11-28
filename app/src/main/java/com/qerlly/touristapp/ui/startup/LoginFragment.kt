@@ -1,4 +1,4 @@
-package com.qerlly.touristapp.application.startup
+package com.qerlly.touristapp.ui.startup
 
 
 import android.os.Bundle

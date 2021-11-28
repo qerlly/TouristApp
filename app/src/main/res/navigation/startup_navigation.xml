@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.qerlly.touristapp.application.startup.LoginFragment"
+        android:name="com.qerlly.touristapp.ui.startup.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -19,12 +19,12 @@
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
-        android:name="com.qerlly.touristapp.application.startup.RegistrationFragment"
+        android:name="com.qerlly.touristapp.ui.startup.RegistrationFragment"
         android:label="fragment_registration"
         tools:layout="@layout/fragment_registration" />
     <fragment
         android:id="@+id/forgotPasswordFragment"
-        android:name="com.qerlly.touristapp.application.startup.ForgotPasswordFragment"
+        android:name="com.qerlly.touristapp.ui.startup.ForgotPasswordFragment"
         android:label="fragment_forgot_password"
         tools:layout="@layout/fragment_forgot_password" />
 </navigation>

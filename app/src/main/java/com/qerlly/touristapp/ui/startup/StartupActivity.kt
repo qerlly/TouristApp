@@ -1,4 +1,4 @@
-package com.qerlly.touristapp.application.startup
+package com.qerlly.touristapp.ui.startup
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.qerlly.touristapp.R
-import com.qerlly.touristapp.application.main.MainActivity
+import com.qerlly.touristapp.ui.main.MainActivity
 import com.qerlly.touristapp.databinding.StartupMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 

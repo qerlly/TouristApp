@@ -1,4 +1,4 @@
-package com.qerlly.touristapp.application.main
+package com.qerlly.touristapp.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.qerlly.touristapp.application.main.adapters.ToursListAdapter
-import com.qerlly.touristapp.application.main.viewmodels.ToursViewModel
+import com.qerlly.touristapp.ui.main.adapters.ToursListAdapter
+import com.qerlly.touristapp.ui.main.viewmodels.ToursViewModel
 import com.qerlly.touristapp.databinding.FragmentToursBinding
 
 class ToursFragment : Fragment() {

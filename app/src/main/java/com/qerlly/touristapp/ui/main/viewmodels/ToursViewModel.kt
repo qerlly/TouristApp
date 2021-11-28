@@ -1,4 +1,4 @@
-package com.qerlly.touristapp.application.main.viewmodels
+package com.qerlly.touristapp.ui.main.viewmodels
 
 import androidx.lifecycle.ViewModel
 

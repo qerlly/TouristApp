@@ -1,8 +1,8 @@
-package com.qerlly.touristapp.application.main.viewmodels
+package com.qerlly.touristapp.ui.main.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.qerlly.touristapp.application.main.widgets.FaqEntryCardModel
+import com.qerlly.touristapp.ui.main.widgets.FaqEntryCardModel
 import com.qerlly.touristapp.model.faq.FaqEntryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*

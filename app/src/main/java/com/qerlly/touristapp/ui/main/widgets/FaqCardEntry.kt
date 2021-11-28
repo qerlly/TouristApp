@@ -1,4 +1,4 @@
-package com.qerlly.touristapp.application.main.widgets
+package com.qerlly.touristapp.ui.main.widgets
 
 import android.view.View
 import androidx.core.text.HtmlCompat

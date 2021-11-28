@@ -48,6 +48,7 @@
             android:background="@android:color/transparent"
             android:hint="@string/enter_message"
             android:inputType="text"
+            android:fontFamily="serif"
             android:maxLines="6"
             tools:ignore="Autofill" />
 
@@ -55,6 +56,8 @@
             android:id="@+id/button_gchat_send"
             android:layout_width="64dp"
             android:layout_height="48dp"
+            android:fontFamily="serif"
+            android:textColor="@color/white"
             android:layout_alignParentEnd="true"
             android:background="?attr/selectableItemBackground"
             android:text="@string/send" />

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".application.main.ToursFragment">
+    tools:context=".ui.main.ToursFragment">
 
     <TextView
         android:id="@+id/search_title"
