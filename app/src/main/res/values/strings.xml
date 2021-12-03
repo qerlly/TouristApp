@@ -23,15 +23,15 @@
 
 
     //startup
-    <string name="login_network_error">login_network_error</string>
-    <string name="login_data_error">login_data_error</string>
-    <string name="login_unknown_error">login_unknown_error</string>
+    <string name="login_network_error">Check your internet connection</string>
+    <string name="login_data_error">Data error</string>
+    <string name="login_unknown_error">Unknown error</string>
     <string name="login_email">login_email</string>
     <string name="login_password">login_password</string>
-    <string name="login_email_invalid">login_email_invalid</string>
-    <string name="login_email_unknown">login_email_unknown</string>
-    <string name="login_password_empty">login_password_empty</string>
-    <string name="login_password_not_valid">login_password_not_valid</string>
+    <string name="login_email_invalid">invalid email</string>
+    <string name="login_email_unknown">unknown email</string>
+    <string name="login_password_empty">password must be at least 6 characters</string>
+    <string name="login_password_not_valid">password is not valid</string>
 
     //main
     <string name="roadmap_title">roadmap_title</string>
@@ -43,11 +43,16 @@
     <string name="name">Full name</string>
     <string name="change">Change</string>
     <string name="phone_number">Phone number</string>
-    <string name="e_mail">E-mail</string>
+    <string name="e_mail">Email</string>
     <string name="location">Localization</string>
     <string name="localiz_access">Do you want to give access to your localization to other participants of the tour?</string>
     <string name="empty_message">empty_message</string>
     <string name="no_internet">no_internet</string>
     <string name="unknown_error">unknown_error</string>
+    <string name="cancel">Cancel</string>
+    <string name="passwords_do_not_match">passwords do not match</string>
+    <string name="collision">The email address is already in use by another account</string>
+    <string name="send_success">Recovery instructions have been sent to your email</string>
+    <string name="send_error">Recovery error</string>
 
 </resources>

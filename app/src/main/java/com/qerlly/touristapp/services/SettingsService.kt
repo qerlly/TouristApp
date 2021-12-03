@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import com.qerlly.touristapp.infrastructure.settings.Settings
 import com.qerlly.touristapp.infrastructure.settings.UserSettings
-import com.qerlly.touristapp.ui.localSettings
+import com.qerlly.touristapp.localSettings
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -18,7 +18,7 @@ import javax.inject.Singleton
 @Singleton
 class SettingsService @Inject constructor(
     @ApplicationContext context: Context,
-    private val authService: AuthenticationService,
+    private val authService: UserAuthService,
 ) {
 
     private val dataStore: DataStore<Preferences> = context.localSettings

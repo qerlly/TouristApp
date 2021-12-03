@@ -2,7 +2,7 @@ package com.qerlly.touristapp
 
 import android.app.Application
 import androidx.viewbinding.BuildConfig
-import com.qerlly.touristapp.services.AuthenticationService
+import com.qerlly.touristapp.services.UserAuthService
 import com.qerlly.touristapp.services.SettingsService
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -16,10 +16,10 @@ import javax.inject.Inject
 class TouristApp: Application() {
 
     @Inject
-    lateinit var settingsService: SettingsService
+    lateinit var userAuthService: UserAuthService
 
     @Inject
-    lateinit var authService: AuthenticationService
+    lateinit var settingsService: SettingsService
 
     override fun onCreate() {
         super.onCreate()
