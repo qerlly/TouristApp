@@ -23,7 +23,7 @@ import com.google.android.material.composethemeadapter.MdcTheme
 import com.qerlly.touristapp.R
 import com.qerlly.touristapp.ui.EmailTextField
 import com.qerlly.touristapp.ui.PasswordTextField
-import com.qerlly.touristapp.ui.start.StartViewModel
+import com.qerlly.touristapp.viewModels.StartViewModel
 
 @Composable
 fun RegistrationScreen(navController: NavHostController, viewModel: StartViewModel, onClick: (String, String) -> Unit) = MdcTheme {
@@ -57,7 +57,7 @@ fun RegistrationScreen(navController: NavHostController, viewModel: StartViewMod
                     else if (rePasswordTextState.value != passwordTextState.value) viewModel.isPasswordNotMatch.value = true
                     else onClick(emailTextState.value, passwordTextState.value)
                 },
-                modifier = Modifier.fillMaxWidth().padding(top = 20.dp),
+                modifier = Modifier.fillMaxWidth().height(64.dp).padding(top = 20.dp),
                 enabled = regButtonEnabled.value
             ) {
                 Text(text = stringResource(R.string.registration).uppercase())

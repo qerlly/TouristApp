@@ -17,7 +17,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.qerlly.touristapp.R
-import com.qerlly.touristapp.ui.start.StartViewModel
+import com.qerlly.touristapp.viewModels.StartViewModel
 
 
 @Composable
@@ -30,7 +30,7 @@ fun EmailTextField(viewModel: StartViewModel, emailTextState: MutableState<Strin
         OutlinedTextField(
             value = emailTextState.value,
             modifier = Modifier.padding(top = 16.dp).fillMaxWidth(),
-            label = { Text(text = stringResource(R.string.e_mail)) },
+            label = { Text(text = stringResource(R.string.mail)) },
             onValueChange = { newValue ->
                 emailTextState.value = newValue
                 viewModel.isInvalidEmail.value = false
@@ -80,9 +80,9 @@ fun PasswordTextField(viewModel: StartViewModel, passwordTextState: MutableState
 fun TrailingIcon(passwordVisibility: MutableState<Boolean>) =
     IconButton(onClick = { passwordVisibility.value = !passwordVisibility.value }) {
         if (passwordVisibility.value) {
-            Icon(Icons.Filled.VisibilityOff, stringResource(R.string.login_password))
+            Icon(Icons.Filled.VisibilityOff, stringResource(R.string.password))
         } else {
-            Icon(Icons.Filled.Visibility, stringResource(R.string.login_password))
+            Icon(Icons.Filled.Visibility, stringResource(R.string.password))
         }
     }
 

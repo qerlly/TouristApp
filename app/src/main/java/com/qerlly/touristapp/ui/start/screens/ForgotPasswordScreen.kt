@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.qerlly.touristapp.R
 import com.qerlly.touristapp.ui.EmailTextField
-import com.qerlly.touristapp.ui.start.StartViewModel
+import com.qerlly.touristapp.viewModels.StartViewModel
 
 @Composable
 fun ForgotPasswordScreen(controller: NavHostController, viewModel: StartViewModel, onClick: (String) -> Unit) {

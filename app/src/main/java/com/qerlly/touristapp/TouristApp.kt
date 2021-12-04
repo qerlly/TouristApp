@@ -3,7 +3,6 @@ package com.qerlly.touristapp
 import android.app.Application
 import androidx.viewbinding.BuildConfig
 import com.qerlly.touristapp.services.UserAuthService
-import com.qerlly.touristapp.services.SettingsService
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -17,9 +16,6 @@ class TouristApp: Application() {
 
     @Inject
     lateinit var userAuthService: UserAuthService
-
-    @Inject
-    lateinit var settingsService: SettingsService
 
     override fun onCreate() {
         super.onCreate()
@@ -36,9 +32,6 @@ class TouristApp: Application() {
     @OptIn(DelicateCoroutinesApi::class)
     private fun initServices() = GlobalScope.launch {
         supervisorScope {
-            launch {
-                settingsService.fetchSettings()
-            }
             launch {
 
             }

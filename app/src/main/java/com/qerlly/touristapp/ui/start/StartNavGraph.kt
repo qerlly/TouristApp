@@ -7,6 +7,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.qerlly.touristapp.viewModels.StartViewModel
 import com.qerlly.touristapp.ui.start.screens.ForgotPasswordScreen
 import com.qerlly.touristapp.ui.start.screens.LoginScreen
 import com.qerlly.touristapp.ui.start.screens.RegistrationScreen

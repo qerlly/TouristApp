@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -32,6 +33,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.qerlly.touristapp.R
 import com.qerlly.touristapp.ui.main.MainActivity
+import com.qerlly.touristapp.viewModels.StartViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -70,7 +72,8 @@ class StartActivity : AppCompatActivity() {
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.h3,
                         fontWeight = FontWeight.ExtraBold,
-                        fontFamily = FontFamily.Serif
+                        fontFamily = FontFamily.Serif,
+                        color = Color.White
                     )
             }
             StartNavGraph(

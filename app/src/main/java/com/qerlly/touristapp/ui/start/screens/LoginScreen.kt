@@ -29,7 +29,7 @@ import com.qerlly.touristapp.R
 import com.qerlly.touristapp.ui.EmailTextField
 import com.qerlly.touristapp.ui.PasswordTextField
 import com.qerlly.touristapp.ui.start.Destinations
-import com.qerlly.touristapp.ui.start.StartViewModel
+import com.qerlly.touristapp.viewModels.StartViewModel
 
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: StartViewModel, onClick: (String, String) -> Unit) = MdcTheme {

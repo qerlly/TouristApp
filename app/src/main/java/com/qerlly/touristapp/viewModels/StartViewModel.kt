@@ -1,4 +1,4 @@
-package com.qerlly.touristapp.ui.start
+package com.qerlly.touristapp.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,9 +9,6 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
-
-
-
 
 @HiltViewModel
 class StartViewModel @Inject constructor(
