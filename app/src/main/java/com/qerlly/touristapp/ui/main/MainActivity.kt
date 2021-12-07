@@ -14,6 +14,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -25,6 +26,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.qerlly.touristapp.R
 import com.qerlly.touristapp.databinding.ActivityMainBinding
+import com.qerlly.touristapp.ui.main.viewmodels.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,6 +39,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private lateinit var navController: NavController
     lateinit var mgr: LocationManager
     private lateinit var criteria: Criteria
+    private val viewModel: MainActivityViewModel by viewModels()
 
     private lateinit var binding: ActivityMainBinding
 
@@ -62,12 +65,17 @@ class MainActivity : AppCompatActivity(), LocationListener {
         binding.navView.setupWithNavController(navController)
         binding.setupToolbar(navController)
         /*setContentView(R.layout.activity_main)*/
+        initObservers()
         prepareLoc()
-        setUpGPS()
+    }
+
+    private fun initObservers() {
+        viewModel.currentPointLatLong.observe(this, viewModel::sendCurrentLocation)
     }
 
     override fun onLocationChanged(location: Location) {
-        Log.d(TAG, location.latitude.toString() + " " + location.longitude)
+        viewModel.currentPointLatLong.value = Pair(location.latitude, location.longitude)
+        /*Log.d(TAG, location.latitude.toString() + " " + location.longitude)*/
     }
 
 
