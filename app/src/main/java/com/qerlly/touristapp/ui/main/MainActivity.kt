@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         binding.navView.setupWithNavController(navController)
         binding.setupToolbar(navController)
         /*setContentView(R.layout.activity_main)*/
-        prepareNav()
+        prepareLoc()
         setUpGPS()
     }
 
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         prefButton.setOnClickListener { navController.navigate(R.id.navigation_pref) }
     }
 
-    private fun prepareNav() {
+    private fun prepareLoc() {
         /*val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController*/
