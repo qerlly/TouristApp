@@ -113,7 +113,8 @@ class StartActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 startViewModel.registrationButtonEnabled.value = false
-                startViewModel.register(email, password).await()
+                val result = startViewModel.register(email, password).await()
+                startViewModel.createUserDoc(result.user!!.uid)
                 startMainActivity()
             } catch (e: FirebaseNetworkException) {
                 networkError()

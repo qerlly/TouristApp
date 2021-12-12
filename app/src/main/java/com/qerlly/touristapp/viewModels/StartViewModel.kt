@@ -3,6 +3,7 @@ package com.qerlly.touristapp.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.AuthResult
+import com.qerlly.touristapp.repositories.UserSettingsRepository
 import com.qerlly.touristapp.services.UserAuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
@@ -13,6 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class StartViewModel @Inject constructor(
     private val userAuthService: UserAuthService,
+    private val userSettingsRepository: UserSettingsRepository
 ) : ViewModel() {
 
     val invalidEmailFormat = MutableStateFlow(false)
@@ -51,6 +53,10 @@ class StartViewModel @Inject constructor(
         isPasswordNotMatch.value = false
         loginButtonEnabled.value = true
         registrationButtonEnabled.value = true
+    }
+
+    fun createUserDoc(uid: String) {
+        userSettingsRepository.createUserDoc(uid)
     }
 
     enum class Status { LOADING, LOGIN, NOT_LOGIN }

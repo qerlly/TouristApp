@@ -78,7 +78,7 @@ fun ToursList(
     Modifier.verticalScroll(rememberScrollState()).padding(16.dp),
     verticalArrangement = Arrangement.spacedBy(12.dp)
 ) {
-    tours.value?.filter { it.title.contains(textState.value) }?.forEach {
+    tours.value?.filter { it.title.uppercase().contains(textState.value.uppercase()) }?.forEach {
         TourListCard(it, viewModel, navController)
     }
 }

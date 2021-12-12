@@ -2,6 +2,7 @@ package com.qerlly.touristapp.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.qerlly.touristapp.model.MemberPoint
 import com.qerlly.touristapp.model.NewModel
 import com.qerlly.touristapp.model.TourModel
 import com.qerlly.touristapp.model.TourPoint
@@ -26,4 +27,7 @@ class TourViewModel @Inject constructor(
 
     val points: StateFlow<List<TourPoint>?> =
         tourRepository.getTourPoints().stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+    val membersPoints: StateFlow<List<MemberPoint>?> =
+        tourRepository.getMembersPoints().stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 }

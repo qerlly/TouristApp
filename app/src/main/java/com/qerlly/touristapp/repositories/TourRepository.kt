@@ -2,6 +2,7 @@ package com.qerlly.touristapp.repositories
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.qerlly.touristapp.asFlow
+import com.qerlly.touristapp.model.MemberPoint
 import com.qerlly.touristapp.model.NewModel
 import com.qerlly.touristapp.model.TourModel
 import com.qerlly.touristapp.model.TourPoint
@@ -76,6 +77,24 @@ class TourRepository @Inject constructor(
                     val latitude = document.getString("latitude") ?: return@mapNotNull null
                     val longitude = document.getString("longitude") ?: return@mapNotNull null
                     TourPoint(id, isDone, latitude, longitude, title, description, image)
+                }
+            }
+    }
+
+    fun getMembersPoints(): Flow<List<MemberPoint>> {
+        var tour: String
+        runBlocking { tour = settingsService.getTour().first() }
+        return firestore
+            .collection("tours/$tour/members")
+            .asFlow()
+            .filterNotNull()
+            .map {
+                it.documents.mapNotNull { document ->
+                    val id = document.id
+                    val email = document.getString("email") ?: return@mapNotNull null
+                    val latitude = document.getString("latitude") ?: return@mapNotNull null
+                    val longitude = document.getString("longitude") ?: return@mapNotNull null
+                    MemberPoint(id, email, latitude, longitude)
                 }
             }
     }
