@@ -1,5 +1,6 @@
 package com.qerlly.touristapp.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,10 @@ class MainActivity: AppCompatActivity() {
         setContent { MainScreen() }
     }
 
+    private fun startRoadmapActivity() {
+        startActivity(Intent(this, RoadmapActivity::class.java))
+    }
+
     @Composable
     fun MainScreen() = MdcTheme {
         val navController = rememberNavController()
@@ -38,7 +43,7 @@ class MainActivity: AppCompatActivity() {
             content = { MainNavGraph(navController, isJoined) },
             bottomBar = {
                 if (currentRoute != Destinations.USER_SCREEN && currentRoute != Destinations.FAQ_SCREEN)
-                    MainBottomBar(navController)
+                    MainBottomBar(navController, this::startRoadmapActivity)
             }
         )
     }

@@ -17,7 +17,6 @@ fun MainNavGraph(navController: NavHostController, isJoined: State<String>) =
         composable(Destinations.CHAT_SCREEN) { ChatScreen() }
         composable(Destinations.TOURS_SCREEN) { if (isJoined.value.isEmpty()) ToursScreen(navController) else TourScreen(navController) }
         composable(Destinations.TOUR_SCREEN) { TourScreen(navController) }
-        composable(Destinations.ROADMAP_SCREEN) { RoadmapScreen() }
         composable(Destinations.CHAT_SCREEN) { ChatScreen() }
         composable(Destinations.FAQ_SCREEN) { FaqScreen() }
     }

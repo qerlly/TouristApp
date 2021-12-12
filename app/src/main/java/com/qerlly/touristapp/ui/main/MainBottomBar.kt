@@ -13,7 +13,7 @@ import androidx.navigation.NavHostController
 import com.qerlly.touristapp.R
 
 @Composable
-fun MainBottomBar(navController: NavHostController) {
+fun MainBottomBar(navController: NavHostController, kFunction: () -> Unit) {
     BottomNavigation(
         backgroundColor = MaterialTheme.colors.background,
         elevation = 2.dp
@@ -34,15 +34,20 @@ fun MainBottomBar(navController: NavHostController) {
                 label = { Text(text = stringResource(item.title)) },
                 selectedContentColor = MaterialTheme.colors.secondary,
                 unselectedContentColor = MaterialTheme.colors.primary,
-                onClick = { navController.navigate(item.route) {
-                    navController.graph.startDestinationRoute?.let { route ->
-                        popUpTo(route) {
-                            saveState = true
+                onClick = {
+                    if(item.route == Destinations.ROADMAP_SCREEN) { kFunction() }
+                    else {
+                        navController.navigate(item.route) {
+                            navController.graph.startDestinationRoute?.let { route ->
+                                popUpTo(route) {
+                                    saveState = true
+                                }
+                            }
+                        launchSingleTop = true
+                        restoreState = true
                         }
                     }
-                    launchSingleTop = true
-                    restoreState = true
-                } },
+                },
                 alwaysShowLabel = true,
                 selected = currentRoute == item.route,
             )
