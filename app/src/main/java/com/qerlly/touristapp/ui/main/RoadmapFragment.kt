@@ -84,7 +84,7 @@ class RoadmapFragment : Fragment() {
         val location = (activity as MainActivity).mgr.getLastKnownLocation((activity as MainActivity).mgr.allProviders.get(0))
         if (location != null) {
             val icon = IconOverlay()
-            icon.set(GeoPoint(location.latitude, location.longitude), resources.getDrawable(R.drawable.ic_baseline_location_on_24))
+            icon.set(GeoPoint(location.latitude, location.longitude), resources.getDrawable(R.drawable.ic_baseline_location_on_24_red))
 
             mapController.setCenter(GeoPoint(location.latitude, location.longitude))
             val overlays = mutableListOf<OverlayItem>()

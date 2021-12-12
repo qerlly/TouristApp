@@ -29,4 +29,9 @@
         android:name="com.qerlly.touristapp.application.main.PointsFragment"
         android:label="points_fragment"
         tools:layout="@layout/points_fragment" />
+    <fragment
+        android:id="@+id/userLocationsFragment"
+        android:name="com.qerlly.touristapp.ui.main.UserLocationsFragment"
+        android:label="user_locations_fragment"
+        tools:layout="@layout/user_locations_fragment" />
 </navigation>

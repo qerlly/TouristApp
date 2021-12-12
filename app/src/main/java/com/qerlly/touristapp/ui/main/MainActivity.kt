@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         /*setContentView(R.layout.activity_main)*/
         initObservers()
         prepareLoc()
+        //navController.navigate(R.id.userLocationsFragment)//todo remove after testing
     }
 
     private fun initObservers() {

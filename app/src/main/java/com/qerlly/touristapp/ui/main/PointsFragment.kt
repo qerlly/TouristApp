@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
 import com.qerlly.touristapp.ui.main.adapters.FaqListAdapter
 import com.qerlly.touristapp.ui.main.viewmodels.PointsViewModel
 import com.qerlly.touristapp.databinding.PointsFragmentBinding

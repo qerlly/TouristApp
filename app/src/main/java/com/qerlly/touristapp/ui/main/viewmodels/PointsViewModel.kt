@@ -17,7 +17,7 @@ class PointsViewModel
     private val openedCardIds: MutableStateFlow<Set<String>> = MutableStateFlow(setOf())
 
     val pointsNameDesc: StateFlow<List<CloseOpenCardModel>?> =
-        pointsRepository.getAll().combine(openedCardIds) { faqEntries, openedEntriesIds ->
+        pointsRepository.getAllPointsOfLocations().combine(openedCardIds) { faqEntries, openedEntriesIds ->
             faqEntries.map { faqEntry ->
                 val opened = faqEntry.id in openedEntriesIds
                 CloseOpenCardModel(faqEntry, opened)
@@ -25,7 +25,7 @@ class PointsViewModel
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     val pointsCoordinates: StateFlow<List<Point>?> =
-        pointsRepository.getAll()
+        pointsRepository.getAllPointsOfLocations()
 
     fun onCardClicked(closeOpenCardModel: CloseOpenCardModel) {
         if (closeOpenCardModel.expanded) {

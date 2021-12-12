@@ -45,7 +45,7 @@ class ToursFragment : Fragment() {
                 this@ToursFragment.adapter.differ.submitList(it)
             }.launchIn(lifecycleScope)
         }
-        viewModel.getTour()
+        //viewModel.getTour()
     }
 
     override fun onDestroy() {
