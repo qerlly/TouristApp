@@ -21,18 +21,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.qerlly.touristapp.R
 import com.qerlly.touristapp.model.NewModel
 import com.qerlly.touristapp.model.TourModel
-import com.qerlly.touristapp.ui.main.Destinations
 import com.qerlly.touristapp.viewModels.TourViewModel
-import kotlinx.coroutines.runBlocking
 
 @Composable
-fun TourScreen(navController: NavHostController) = MdcTheme {
+fun TourScreen() = MdcTheme {
 
     val viewModel = hiltViewModel<TourViewModel>()
 
@@ -72,15 +69,6 @@ fun TourScreen(navController: NavHostController) = MdcTheme {
         }
         TourCardInfo(stringResource(R.string.details), tour.value)
         TourCard(stringResource(R.string.announcements), news)
-        Button(onClick = {
-            runBlocking { viewModel.leaveTour() }
-            navController.navigate(Destinations.TOURS_SCREEN) {
-            popUpTo(Destinations.TOUR_SCREEN) {
-                inclusive = true
-            }
-        } }) {
-            Text(text = stringResource(R.string.exit_tour).uppercase(),  style = MaterialTheme.typography.body1)
-        }
     }
 }
 

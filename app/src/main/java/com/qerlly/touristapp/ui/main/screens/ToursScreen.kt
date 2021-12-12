@@ -78,7 +78,7 @@ fun ToursList(
     Modifier.verticalScroll(rememberScrollState()).padding(16.dp),
     verticalArrangement = Arrangement.spacedBy(12.dp)
 ) {
-    tours.value?.filter { it.id.contains(textState.value) }?.forEach {
+    tours.value?.filter { it.title.contains(textState.value) }?.forEach {
         TourListCard(it, viewModel, navController)
     }
 }
@@ -159,7 +159,7 @@ fun DialogAdd(
                     Button(
                         onClick = {
                             if(text.value == model.password) {
-                                runBlocking {viewModel.joinToTour(model.id) }
+                                runBlocking { viewModel.joinToTour(model.id) }
                                 navController.navigate(Destinations.TOUR_SCREEN) {
                                     popUpTo(Destinations.TOURS_SCREEN) {
                                         inclusive = true

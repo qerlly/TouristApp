@@ -12,6 +12,7 @@ import com.qerlly.touristapp.services.UserAuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,7 +48,11 @@ class UserSettingsViewModel @Inject constructor(
             .stateIn(viewModelScope, SharingStarted.Eagerly, true)
 
     fun saveUserDate(name: String, phone: String) {
-        userSettingsRepository.saveByUserID(userAuthService.userId!!, name, phone)
+        val state: UserSettingsModel
+        runBlocking {
+            state = dataState.first()
+        }
+        userSettingsRepository.saveByUserID(userAuthService.userId!!, name, phone, state.tour)
     }
 
     fun saveLocalizationState(state: Boolean) {
@@ -64,4 +69,13 @@ class UserSettingsViewModel @Inject constructor(
     }
 
     fun logout() { userAuthService.logout() }
+
+    fun leaveTour() {
+        val state: UserSettingsModel
+        runBlocking {
+            settingsService.setTour("")
+            state = dataState.first()
+        }
+        userSettingsRepository.saveByUserID(userAuthService.userId!!, state.fullName, state.phone, "")
+    }
 }

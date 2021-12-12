@@ -29,6 +29,7 @@ import com.qerlly.touristapp.ui.ErrorText
 import com.qerlly.touristapp.ui.TrailingIcon
 import com.qerlly.touristapp.ui.start.StartActivity
 import com.qerlly.touristapp.viewModels.UserSettingsViewModel
+import kotlinx.coroutines.runBlocking
 import java.util.regex.Pattern
 
 @Composable
@@ -42,10 +43,19 @@ fun UserScreen() = Column(
 
     val viewModel = hiltViewModel<UserSettingsViewModel>()
 
+    val state = viewModel.dataState.collectAsState()
+
     UserCardButton(viewModel.activeUserEmail, viewModel.isUserActive, stringResource(R.string.logout), viewModel::logout)
     PasswordCardButton(viewModel, stringResource(R.string.change), viewModel::changePassword)
     UserCardSwitch(stringResource(R.string.loc_question), viewModel)
     UserCardEdit(viewModel)
+
+    Button(
+        enabled = state.value.tour.isNotEmpty(),
+        onClick = { runBlocking { viewModel.leaveTour() } }
+    ) {
+        Text(text = stringResource(R.string.exit_tour).uppercase(),  style = MaterialTheme.typography.body1)
+    }
 }
 
 @Composable
@@ -56,7 +66,9 @@ fun UserCardButton(text: String?, enabled: Boolean, buttonText: String, onClick:
 ) {
     val activity = LocalContext.current.getActivity()
     Row(
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -82,7 +94,9 @@ fun UserCardSwitch(text: String, viewModel: UserSettingsViewModel) = Card(
 ) {
     val state = viewModel.localizationState.collectAsState()
     Row(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -166,17 +180,20 @@ fun PasswordCardButton(
 ) {
     val visibility = remember { mutableStateOf(false) }
 
-    val passwordTextState = remember { mutableStateOf("haslo123") }
+    val passwordTextState = remember { mutableStateOf("") }
 
-    val newPasswordTextState = remember { mutableStateOf("123456") }
+    val newPasswordTextState = remember { mutableStateOf("") }
 
-    val reNewPasswordTextState = remember { mutableStateOf("123456") }
+    val reNewPasswordTextState = remember { mutableStateOf("") }
 
     val context = LocalContext.current.applicationContext
 
     Column {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { visibility.value = !visibility.value },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .clickable { visibility.value = !visibility.value },
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
