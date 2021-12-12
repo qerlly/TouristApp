@@ -35,5 +35,16 @@
     <string name="full_name_error">invalid name format</string>
     <string name="old_password">Previous password</string>
     <string name="repeat_password">Repeat password</string>
+    <string name="chat">Tour chat</string>
+    <string name="roadmap">Roadmap</string>
+    <string name="tours">Tours</string>
+    <string name="search">Search</string>
+    <string name="message">Message</string>
+    <string name="need_tour_chat">Sign up for a guided tour to engage in dialogue</string>
+    <string name="no_messages">No messages</string>
+    <string name="exit_tour">leave the tour</string>
+    <string name="details">Details</string>
+    <string name="announcements">Announcements</string>
+    <string name="tour_adding">Do you want to join to this tour?</string>
 
 </resources>

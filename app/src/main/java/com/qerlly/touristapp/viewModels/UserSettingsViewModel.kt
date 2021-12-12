@@ -38,7 +38,7 @@ class UserSettingsViewModel @Inject constructor(
             .stateIn(
                 viewModelScope,
                 SharingStarted.WhileSubscribed(),
-                UserSettingsModel("", "", "")
+                UserSettingsModel("", "", "", "")
             )
 
     val localizationState: StateFlow<Boolean> =

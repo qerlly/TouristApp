@@ -21,7 +21,8 @@ class UserSettingsRepository @Inject constructor(
             val id = document.id
             val fullName = document.getString("full_name") ?: return@map null
             val phone = document.getString("phone") ?: return@map null
-            UserSettingsModel(id, fullName, phone)
+            val tour = document.getString("tour") ?: return@map null
+            UserSettingsModel(id, fullName, phone, tour)
         }
 
     fun saveByUserID(userId: String, name: String, phone: String) {

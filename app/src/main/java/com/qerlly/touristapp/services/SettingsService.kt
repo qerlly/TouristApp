@@ -2,10 +2,7 @@ package com.qerlly.touristapp.services
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.MutablePreferences
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.*
 import com.qerlly.touristapp.userSettings
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +15,12 @@ import javax.inject.Singleton
 class SettingsService @Inject constructor(@ApplicationContext context: Context) {
 
     private val dataStore: DataStore<Preferences> = context.userSettings
+
+    fun getTour(): Flow<String> =
+        dataStore.data.map { UserPreferences.TOUR.getValue(it) as String }
+
+    suspend fun setTour(tour: String) =
+        setSetting(UserPreferences.TOUR, tour)
 
     fun getUserLocalization(): Flow<Boolean> =
         dataStore.data.map { UserPreferences.LOCALIZATION.getValue(it) as Boolean }
@@ -38,7 +41,9 @@ enum class UserPreferences(
     private val mapper: ((Any) -> Any)? = null,
 ) {
 
-    LOCALIZATION(stringPreferencesKey("localization"), true);
+    LOCALIZATION(booleanPreferencesKey("localization"), true),
+
+    TOUR(stringPreferencesKey("tour"), "");
 
     fun getValue(preferences: Preferences): Any = (preferences[preferenceKey] ?: defaultValue).let {
         mapper?.invoke(it) ?: it

@@ -50,14 +50,30 @@ fun AppBarButtons(navController: NavHostController) {
         modifier = Modifier.padding(start = 12.dp),
     )
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-        IconButton(onClick = { navController.navigate(Destinations.USER_SCREEN) }) {
+        IconButton(onClick = { navController.navigate(Destinations.USER_SCREEN) {
+            navController.graph.startDestinationRoute?.let { route ->
+                popUpTo(route) {
+                    saveState = true
+                }
+            }
+            launchSingleTop = true
+            restoreState = true
+        } }) {
             Icon(
                 painter = painterResource(R.drawable.ic_baseline_person_24),
                 contentDescription = stringResource(R.string.user),
                 tint = MaterialTheme.colors.primary
             )
         }
-        IconButton(onClick = { navController.navigate(Destinations.FAQ_SCREEN) }) {
+        IconButton(onClick = { navController.navigate(Destinations.FAQ_SCREEN) {
+            navController.graph.startDestinationRoute?.let { route ->
+                popUpTo(route) {
+                    saveState = true
+                }
+            }
+            launchSingleTop = true
+            restoreState = true
+        } }) {
             Icon(
                 painter = painterResource(R.drawable.ic_baseline_contact_support_24),
                 contentDescription = stringResource(R.string.faq),

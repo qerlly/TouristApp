@@ -56,9 +56,7 @@ fun UserCardButton(text: String?, enabled: Boolean, buttonText: String, onClick:
 ) {
     val activity = LocalContext.current.getActivity()
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -84,9 +82,7 @@ fun UserCardSwitch(text: String, viewModel: UserSettingsViewModel) = Card(
 ) {
     val state = viewModel.localizationState.collectAsState()
     Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -180,10 +176,7 @@ fun PasswordCardButton(
 
     Column {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .clickable { visibility.value = !visibility.value },
+            modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { visibility.value = !visibility.value },
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {

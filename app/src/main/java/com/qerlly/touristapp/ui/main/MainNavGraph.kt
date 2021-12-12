@@ -1,25 +1,24 @@
 package com.qerlly.touristapp.ui.main
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.qerlly.touristapp.ui.main.screens.FaqScreen
-import com.qerlly.touristapp.ui.main.screens.ToursScreen
-import com.qerlly.touristapp.ui.main.screens.UserScreen
+import com.qerlly.touristapp.ui.main.screens.*
 
 @Composable
-fun MainNavGraph(navController: NavHostController) =
+fun MainNavGraph(navController: NavHostController, isJoined: State<String>) =
     NavHost(
         navController = navController,
-        startDestination = Destinations.TOURS_SCREEN
+        startDestination = if (isJoined.value.isEmpty()) Destinations.TOURS_SCREEN else Destinations.TOUR_SCREEN
     ) {
         composable(Destinations.USER_SCREEN) { UserScreen() }
-        composable(Destinations.CHAT_SCREEN) { }
-        composable(Destinations.TOURS_SCREEN) { ToursScreen() }
-        composable(Destinations.TOUR_SCREEN) { }
-        composable(Destinations.ROADMAP_SCREEN) { }
-        composable(Destinations.CHAT_SCREEN) { }
+        composable(Destinations.CHAT_SCREEN) { ChatScreen() }
+        composable(Destinations.TOURS_SCREEN) { if (isJoined.value.isEmpty()) ToursScreen(navController) else TourScreen(navController) }
+        composable(Destinations.TOUR_SCREEN) { TourScreen(navController) }
+        composable(Destinations.ROADMAP_SCREEN) { RoadmapScreen() }
+        composable(Destinations.CHAT_SCREEN) { ChatScreen() }
         composable(Destinations.FAQ_SCREEN) { FaqScreen() }
     }
 

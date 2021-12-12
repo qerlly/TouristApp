@@ -4,10 +4,6 @@ import android.app.Application
 import androidx.viewbinding.BuildConfig
 import com.qerlly.touristapp.services.UserAuthService
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -20,21 +16,11 @@ class TouristApp: Application() {
     override fun onCreate() {
         super.onCreate()
         initTimber()
-        initServices()
     }
 
     private fun initTimber() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-        }
-    }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    private fun initServices() = GlobalScope.launch {
-        supervisorScope {
-            launch {
-
-            }
         }
     }
 }
