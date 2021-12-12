@@ -67,7 +67,7 @@ class StartActivity : AppCompatActivity() {
                         contentDescription = stringResource(R.string.app_name),
                     )
                     Text(
-                        modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter),
+                        modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = 16.dp),
                         text = stringResource(R.string.app_name),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.h3,

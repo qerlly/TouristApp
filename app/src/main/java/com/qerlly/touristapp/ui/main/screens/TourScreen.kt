@@ -58,7 +58,7 @@ fun TourScreen() = MdcTheme {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.BottomCenter),
+                    .align(Alignment.BottomCenter).padding(bottom = 16.dp),
                 text = tour.value?.title ?: stringResource(R.string.app_name),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.h3,
