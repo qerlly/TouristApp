@@ -39,15 +39,15 @@ class ChatViewModel @Inject constructor(
 
             root = firebaseDatabase.reference.child(tourId!!)
 
+            messages.value = mutableListOf()
+
             root!!.addChildEventListener(object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    Timber.tag("ZXC").i("added")
                     appendChatConversation(snapshot)
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                     appendChatConversation(snapshot)
-                    Timber.tag("ZXC").i("changed")
                 }
 
                 override fun onChildRemoved(snapshot: DataSnapshot) { appendChatConversation(snapshot) }
@@ -63,8 +63,8 @@ class ChatViewModel @Inject constructor(
         settingsService.getPhoto()
             .filter { it.isNotEmpty() }
             .onEach {
-                sendMessage(it, true)
                 settingsService.setPhoto("")
+                sendMessage(it, true)
             }
             .stateIn(scope, SharingStarted.Eagerly, "")
 
@@ -85,16 +85,16 @@ class ChatViewModel @Inject constructor(
 
     private fun appendChatConversation(dataSnapshot: DataSnapshot) {
         val iterator = dataSnapshot.children.iterator()
+        val newList  = mutableListOf<MessageModel>()
+
         while (iterator.hasNext()){
             val email: String = (iterator.next() as DataSnapshot).value.toString()
             val message: String = (iterator.next() as DataSnapshot).value.toString()
             val messageChunks = message.split(" :?: ")
-            val newList  = mutableListOf<MessageModel>()
 
             messages.value?.forEach {
                 newList.add(it)
             }
-
             newList.add(
                 MessageModel(
                     email = email,
@@ -104,8 +104,7 @@ class ChatViewModel @Inject constructor(
                     own = email == userAuthService.userEmail
                 ),
             )
-
-            messages.value = newList
         }
+        messages.value = newList
     }
 }
