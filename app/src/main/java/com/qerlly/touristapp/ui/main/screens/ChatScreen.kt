@@ -9,16 +9,13 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Send
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -34,7 +31,8 @@ import com.qerlly.touristapp.model.MessageModel
 import com.qerlly.touristapp.viewModels.ChatViewModel
 
 @Composable
-fun ChatScreen() = Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f)) {
+fun ChatScreen(photo: () -> Unit, isGid: Boolean) =
+    Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f)) {
 
     val viewModel = hiltViewModel<ChatViewModel>()
 
@@ -53,12 +51,9 @@ fun ChatScreen() = Box(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f)) 
         ChatList(messages.value)
     }
     Row(Modifier.align(Alignment.BottomCenter), verticalAlignment = Alignment.CenterVertically) {
-        if(true) {
-            IconButton(
-                onClick = {
-                    /*if (textState.value.isEmpty()) Toast.makeText(context, R.string.no_text, Toast.LENGTH_SHORT).show()
-                    else { viewModel.sendMessage(textState.value).also { textState.value = "" } }*/
-                }) { Icon(Icons.Filled.PhotoCamera, stringResource(R.string.send), Modifier.size(32.dp)) }
+        if(isGid) {
+            IconButton(onClick = { photo() })
+            { Icon(Icons.Filled.PhotoCamera, stringResource(R.string.send), Modifier.size(32.dp)) }
         }
         OutlinedTextField(
             value = textState.value,
@@ -96,17 +91,17 @@ fun ChatItem(messageModel: MessageModel) = Column(
         text = messageModel.email,
         textAlign = TextAlign.Center,
         fontFamily = FontFamily.Serif,
-        color = MaterialTheme.colors.primary,
+        color = if (messageModel.email.endsWith("@firma.gid.com")) Color.Red else MaterialTheme.colors.primary,
         style = MaterialTheme.typography.body2
     )
     Card(
         shape = RoundedCornerShape(4.dp),
         elevation = 4.dp,
-        modifier = Modifier.padding(4.dp).defaultMinSize(120.dp, 32.dp)
+        modifier = Modifier.padding(4.dp)
     ) {
         if (messageModel.isImage) {
             Image(
-                modifier = Modifier.width(220.dp).height(220.dp).clip(RoundedCornerShape(10.dp)),
+                modifier = Modifier.fillMaxWidth(0.8f).height(320.dp).clip(RoundedCornerShape(10.dp)),
                 painter = rememberImagePainter(messageModel.message),
                 contentDescription = stringResource(R.string.app_name),
             )

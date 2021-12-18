@@ -11,15 +11,19 @@ import com.qerlly.touristapp.R
 import com.qerlly.touristapp.ui.main.screens.*
 
 @Composable
-fun MainNavGraph(navController: NavHostController, isJoined: State<String>) =
-    NavHost(
+fun MainNavGraph(
+    navController: NavHostController,
+    isJoined: State<String>,
+    photo: () -> Unit,
+    isGid: Boolean
+) = NavHost(
         navController = navController,
         startDestination = if (isJoined.value.isEmpty()) Destinations.TOURS_SCREEN else Destinations.TOUR_SCREEN
     ) {
         composable(Destinations.USER_SCREEN) { UserScreen() }
         composable(Destinations.TOURS_SCREEN) { if (isJoined.value.isEmpty()) ToursScreen(navController) else TourScreen() }
         composable(Destinations.TOUR_SCREEN) { TourScreen() }
-        composable(Destinations.CHAT_SCREEN) { if (isJoined.value.isEmpty()) ShowErrorToast() else ChatScreen() }
+        composable(Destinations.CHAT_SCREEN) { if (isJoined.value.isEmpty()) ShowErrorToast() else ChatScreen(photo, isGid) }
         composable(Destinations.FAQ_SCREEN) { FaqScreen() }
     }
 

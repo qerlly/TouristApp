@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.qerlly.touristapp.R
 import com.qerlly.touristapp.model.UserSettingsModel
+import com.qerlly.touristapp.repositories.TourRepository
 import com.qerlly.touristapp.repositories.UserSettingsRepository
 import com.qerlly.touristapp.services.SettingsService
 import com.qerlly.touristapp.services.UserAuthService
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class UserSettingsViewModel @Inject constructor(
     private val userAuthService: UserAuthService,
     private val userSettingsRepository: UserSettingsRepository,
+    private val tourRepository: TourRepository,
     private val settingsService: SettingsService,
 ): ViewModel() {
 
@@ -38,7 +40,7 @@ class UserSettingsViewModel @Inject constructor(
             .filterNotNull()
             .stateIn(
                 viewModelScope,
-                SharingStarted.WhileSubscribed(),
+                SharingStarted.Eagerly,
                 UserSettingsModel("", "", "", "")
             )
 
@@ -68,7 +70,7 @@ class UserSettingsViewModel @Inject constructor(
         }
     }
 
-    fun logout() { userAuthService.logout() }
+    fun logout() { userAuthService.logout().also { viewModelScope.launch { settingsService.setTour("") } } }
 
     fun leaveTour() {
         val state: UserSettingsModel
@@ -77,5 +79,6 @@ class UserSettingsViewModel @Inject constructor(
             state = dataState.first()
         }
         userSettingsRepository.saveByUserID(userAuthService.userId!!, state.fullName, state.phone, "")
+        tourRepository.removeMemberByUserID(userAuthService.userId!!, state.tour)
     }
 }

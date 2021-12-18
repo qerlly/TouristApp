@@ -8,9 +8,9 @@ import com.qerlly.touristapp.model.MessageModel
 import com.qerlly.touristapp.services.SettingsService
 import com.qerlly.touristapp.services.UserAuthService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
@@ -24,6 +24,8 @@ class ChatViewModel @Inject constructor(
     private val settingsService: SettingsService,
     private val firebaseDatabase: FirebaseDatabase
 ): ViewModel() {
+
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
     private val _messages = MutableStateFlow<MutableList<MessageModel>>(mutableListOf())
 
@@ -59,13 +61,22 @@ class ChatViewModel @Inject constructor(
         }
     }
 
+    val photoToUpload: StateFlow<String> =
+        settingsService.getPhoto()
+            .filter { it.isNotEmpty() }
+            .onEach {
+                sendMessage(it, true)
+                settingsService.setPhoto("")
+            }
+            .stateIn(scope, SharingStarted.Eagerly, "")
+
     @SuppressLint("SimpleDateFormat")
-    fun sendMessage(message: String) = tourId?.let {
+    fun sendMessage(message: String, image: Boolean = false) = tourId?.let {
         val map = hashMapOf<String, Any>()
         val key = root!!.push().key
         root!!.updateChildren(map)
 
-        val messageAggregate = "$message :?: ${SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date())} :?: false"
+        val messageAggregate = "$message :?: ${SimpleDateFormat("dd/M/yyyy hh:mm:ss").format(Date())} :?: $image"
         val messageRoot: DatabaseReference = root!!.child(key!!)
         val messageMap = hashMapOf<String, Any>(
             "email" to userAuthService.userEmail!!,
