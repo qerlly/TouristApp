@@ -27,34 +27,32 @@ class ChatViewModel @Inject constructor(
 
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
-    private val _messages = MutableStateFlow<MutableList<MessageModel>>(mutableListOf())
-
-    val messages: StateFlow<List<MessageModel>> = _messages
+    val messages = MutableStateFlow<MutableList<MessageModel>?>(null)
 
     private var tourId: String? = null
 
     private var root: DatabaseReference? = null
 
     init {
-        runBlocking {
-            tourId = settingsService.getTour().firstOrNull()
-        }
-        tourId?.let {
+        scope.launch {
+            tourId = settingsService.getTour().first()
+
             root = firebaseDatabase.reference.child(tourId!!)
-        }
-        viewModelScope.launch {
+
             root!!.addChildEventListener(object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    Timber.tag("ZXC").i("added")
                     appendChatConversation(snapshot)
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                     appendChatConversation(snapshot)
+                    Timber.tag("ZXC").i("changed")
                 }
 
-                override fun onChildRemoved(snapshot: DataSnapshot) {}
+                override fun onChildRemoved(snapshot: DataSnapshot) { appendChatConversation(snapshot) }
 
-                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) { appendChatConversation(snapshot) }
 
                 override fun onCancelled(error: DatabaseError) {}
             })
@@ -91,15 +89,23 @@ class ChatViewModel @Inject constructor(
             val email: String = (iterator.next() as DataSnapshot).value.toString()
             val message: String = (iterator.next() as DataSnapshot).value.toString()
             val messageChunks = message.split(" :?: ")
-            _messages.value.add(
+            val newList  = mutableListOf<MessageModel>()
+
+            messages.value?.forEach {
+                newList.add(it)
+            }
+
+            newList.add(
                 MessageModel(
                     email = email,
                     message = messageChunks[0],
                     time = messageChunks[1],
                     isImage = messageChunks[2].toBoolean(),
                     own = email == userAuthService.userEmail
-                )
+                ),
             )
+
+            messages.value = newList
         }
     }
 }

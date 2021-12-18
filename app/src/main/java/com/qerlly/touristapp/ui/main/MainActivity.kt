@@ -20,10 +20,13 @@ import javax.inject.Inject
 import android.graphics.Bitmap
 import java.io.ByteArrayOutputStream
 import android.net.Uri
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.storage.UploadTask
@@ -110,20 +113,22 @@ class MainActivity: AppCompatActivity() {
 
         val currentRoute = navState.value?.destination?.route
 
-        if (progressState.value) CircularProgressIndicator(Modifier.fillMaxWidth())
-        else {
-            val isJoined = settingsService.getTour().collectAsState("")
+        Box(Modifier.fillMaxSize()) {
+            if (progressState.value) CircularProgressIndicator(Modifier.align(Alignment.Center))
+            else {
+                val isJoined = settingsService.getTour().collectAsState("")
 
-            val isGid: Boolean = userAuthService.isUserGid()
+                val isGid: Boolean = userAuthService.isUserGid()
 
-            Scaffold(
-                topBar = { MainAppBar(navController) },
-                content = { MainNavGraph(navController, isJoined, this::dispatchTakePictureIntent, isGid) },
-                bottomBar = {
-                    if (currentRoute != Destinations.USER_SCREEN && currentRoute != Destinations.FAQ_SCREEN)
-                        MainBottomBar(navController, this::startRoadmapActivity, isJoined)
-                }
-            )
+                Scaffold(
+                    topBar = { MainAppBar(navController) },
+                    content = { MainNavGraph(navController, isJoined, this@MainActivity::dispatchTakePictureIntent, isGid) },
+                    bottomBar = {
+                        if (currentRoute != Destinations.USER_SCREEN && currentRoute != Destinations.FAQ_SCREEN)
+                            MainBottomBar(navController, this@MainActivity::startRoadmapActivity, isJoined)
+                    }
+                )
+            }
         }
 
         lifecycleScope.launch {
