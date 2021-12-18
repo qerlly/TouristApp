@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.google.android.material.composethemeadapter.MdcTheme
 import com.qerlly.touristapp.R
@@ -28,6 +29,7 @@ import com.qerlly.touristapp.model.NewModel
 import com.qerlly.touristapp.model.TourModel
 import com.qerlly.touristapp.viewModels.TourViewModel
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun TourScreen() = MdcTheme {
 
@@ -38,27 +40,19 @@ fun TourScreen() = MdcTheme {
     val news = viewModel.tourNews.collectAsState()
 
     Column(
-        Modifier
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState()),
+        Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Box(
-            Modifier
-                .padding(16.dp)
-                .height(260.dp)) {
+            Modifier.padding(16.dp).height(260.dp)) {
             Image(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(10.dp)),
+                modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(10.dp)),
                 painter = rememberImagePainter(tour.value?.image),
                 contentDescription = stringResource(R.string.app_name),
             )
             Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter).padding(bottom = 16.dp),
+                modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter).padding(bottom = 16.dp),
                 text = tour.value?.title ?: stringResource(R.string.app_name),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.h3,
@@ -79,9 +73,7 @@ fun TourCardInfo(title: String, tour: TourModel?) {
     val visibility = remember { mutableStateOf(false) }
 
     Card(
-        modifier = Modifier
-            .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-            .fillMaxWidth(),
+        modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp).fillMaxWidth(),
         shape = RoundedCornerShape(4.dp),
         elevation = 4.dp,
         onClick = { visibility.value = !visibility.value }

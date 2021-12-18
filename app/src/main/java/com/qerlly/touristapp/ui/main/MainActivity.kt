@@ -43,7 +43,7 @@ class MainActivity: AppCompatActivity() {
             content = { MainNavGraph(navController, isJoined) },
             bottomBar = {
                 if (currentRoute != Destinations.USER_SCREEN && currentRoute != Destinations.FAQ_SCREEN)
-                    MainBottomBar(navController, this::startRoadmapActivity)
+                    MainBottomBar(navController, this::startRoadmapActivity, isJoined)
             }
         )
     }
