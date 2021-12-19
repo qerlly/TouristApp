@@ -41,10 +41,12 @@
     <string name="search">Search</string>
     <string name="message">Message</string>
     <string name="need_tour_chat">Sign up for a guided tour to engage in dialogue</string>
+    <string name="need_tour_roadmap">Sign up for a guided tour to engage in roadmap</string>
     <string name="no_messages">No messages</string>
     <string name="exit_tour">leave the tour</string>
     <string name="details">Details</string>
     <string name="announcements">Announcements</string>
     <string name="tour_adding">Do you want to join to this tour?</string>
+    <string name="no_text">The input field is empty</string>
 
 </resources>

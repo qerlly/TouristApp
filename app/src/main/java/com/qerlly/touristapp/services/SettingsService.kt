@@ -12,7 +12,9 @@ import javax.inject.Singleton
 
 @Suppress("UNCHECKED_CAST")
 @Singleton
-class SettingsService @Inject constructor(@ApplicationContext context: Context) {
+class SettingsService @Inject constructor(
+    @ApplicationContext context: Context,
+) {
 
     private val dataStore: DataStore<Preferences> = context.userSettings
 
@@ -21,6 +23,12 @@ class SettingsService @Inject constructor(@ApplicationContext context: Context) 
 
     suspend fun setTour(tour: String) =
         setSetting(UserPreferences.TOUR, tour)
+
+    fun getPhoto(): Flow<String> =
+        dataStore.data.map { UserPreferences.PHOTO.getValue(it) as String }
+
+    suspend fun setPhoto(uri: String) =
+        setSetting(UserPreferences.PHOTO, uri)
 
     fun getUserLocalization(): Flow<Boolean> =
         dataStore.data.map { UserPreferences.LOCALIZATION.getValue(it) as Boolean }
@@ -42,6 +50,8 @@ enum class UserPreferences(
 ) {
 
     LOCALIZATION(booleanPreferencesKey("localization"), true),
+
+    PHOTO(stringPreferencesKey("photo"), ""),
 
     TOUR(stringPreferencesKey("tour"), "");
 

@@ -35,9 +35,7 @@ import java.util.regex.Pattern
 @Composable
 fun UserScreen() = Column(
     verticalArrangement = Arrangement.spacedBy(16.dp),
-    modifier = Modifier
-        .verticalScroll(rememberScrollState())
-        .padding(16.dp),
+    modifier = Modifier.verticalScroll(rememberScrollState()).padding(16.dp),
     horizontalAlignment = Alignment.CenterHorizontally
 ) {
 
@@ -66,9 +64,7 @@ fun UserCardButton(text: String?, enabled: Boolean, buttonText: String, onClick:
 ) {
     val activity = LocalContext.current.getActivity()
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

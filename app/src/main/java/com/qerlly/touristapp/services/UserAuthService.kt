@@ -63,4 +63,6 @@ class UserAuthService @Inject constructor(
     fun logout() {
         firebase.signOut()
     }
+
+    fun isUserGid(): Boolean = userEmail?.endsWith("@firma.gid.com") ?: false
 }

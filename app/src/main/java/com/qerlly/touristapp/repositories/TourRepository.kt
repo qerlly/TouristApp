@@ -1,5 +1,6 @@
 package com.qerlly.touristapp.repositories
 
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.qerlly.touristapp.asFlow
 import com.qerlly.touristapp.model.MemberPoint
@@ -97,5 +98,10 @@ class TourRepository @Inject constructor(
                     MemberPoint(id, email, latitude, longitude)
                 }
             }
+    }
+
+    fun removeMemberByUserID(userId: String, tour: String) {
+        val doc: DocumentReference = firestore.document("tours/$tour/members/$userId")
+        doc.delete()
     }
 }
