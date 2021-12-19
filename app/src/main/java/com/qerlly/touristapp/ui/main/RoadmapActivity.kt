@@ -10,22 +10,26 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.qerlly.touristapp.BuildConfig
 import com.qerlly.touristapp.R
 import com.qerlly.touristapp.databinding.ActivityRoadmapBinding
 import com.qerlly.touristapp.model.MemberPoint
 import com.qerlly.touristapp.model.TourPoint
 import com.qerlly.touristapp.model.map.MyOwnItemizedOverlay
+import com.qerlly.touristapp.ui.main.adapters.FaqListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -58,6 +62,21 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
         super.onCreate(savedInstanceState)
         binding = ActivityRoadmapBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val adapter = FaqListAdapter(viewModel::onCardClicked)
+        val manager = LinearLayoutManager(this)
+        binding?.points?.setLayoutManager(manager)
+        binding?.points?.adapter = adapter
+
+        viewModel.pointsNameDesc.onEach {
+            if (it == null) {
+                binding?.points?.visibility = View.GONE
+            } else {
+                binding.points?.visibility = View.VISIBLE
+                adapter.submitList(it)
+            }
+        }.flowWithLifecycle(lifecycle)
+            .launchIn(lifecycleScope)
 
         /*val adapter = FaqListAdapter(viewModel::onCardClicked)
         val manager = LinearLayoutManager(requireContext())

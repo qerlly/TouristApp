@@ -4,4 +4,8 @@ class CloseOpenModel(
     var id: String,
     var textOnOpen: String,
     var textOnClosed: String,
-)
+){
+    companion object {
+        fun new(tourPoint: TourPoint) = CloseOpenModel(tourPoint.id, tourPoint.title, tourPoint.description)
+    }
+}
