@@ -1,10 +1,13 @@
 package com.qerlly.touristapp.ui.main
 
+import android.location.LocationManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.qerlly.touristapp.model.CloseOpenModel
 import com.qerlly.touristapp.model.MemberPoint
 import com.qerlly.touristapp.model.TourPoint
+import com.qerlly.touristapp.receivers.LocationState
+import com.qerlly.touristapp.receivers.LocationStateReceiver
 import com.qerlly.touristapp.repositories.TourRepository
 import com.qerlly.touristapp.repositories.UserSettingsRepository
 import com.qerlly.touristapp.services.SettingsService
@@ -12,15 +15,20 @@ import com.qerlly.touristapp.ui.main.widgets.CloseOpenCardModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     tourRepository: TourRepository,
     private val userSettingsRepository: UserSettingsRepository,
-    private val settingsService: SettingsService
+    private val settingsService: SettingsService,
+    private val locationReceiver: LocationStateReceiver,
 ) : ViewModel() {
+
+    val localizationState: Flow<Boolean> =
+        locationReceiver.state
+            .map { it == LocationState.ENABLED }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), true)
 
     private val openedCardIds: MutableStateFlow<Set<String>> = MutableStateFlow(setOf())
 
@@ -67,5 +75,10 @@ class MainActivityViewModel @Inject constructor(
         openedCardIds.value = openedCardIds.value.toMutableSet().apply {
             operation(closeOpenCardModel.closeOpenModel.id)
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        locationReceiver.unregisterReceiver()
     }
 }

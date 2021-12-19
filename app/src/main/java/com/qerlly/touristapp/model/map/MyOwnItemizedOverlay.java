@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.qerlly.touristapp.R;
+
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
@@ -32,10 +34,16 @@ public class MyOwnItemizedOverlay extends ItemizedIconOverlay<OverlayItem> {
 
     @Override
     protected boolean onSingleTapUpHelper(final int index, final OverlayItem item, final MapView mapView) {
-        //Toast.makeText(mContext, "Item " + index + " has been tapped!", Toast.LENGTH_SHORT).show();
         AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-        dialog.setTitle(item.getTitle());
-        dialog.setMessage(item.getSnippet());
+        String[] arr = item.getSnippet().split("\t");
+
+        if (Boolean.parseBoolean(arr[1])) dialog.setTitle(item.getTitle().concat(" - is passed!"));
+        else dialog.setTitle(item.getTitle());
+
+        dialog.setMessage(arr[0]);
+
+        if(Boolean.parseBoolean(arr[1])) dialog.setIcon(R.drawable.checked);
+
         dialog.setPositiveButton("ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.dismiss();
@@ -44,6 +52,8 @@ public class MyOwnItemizedOverlay extends ItemizedIconOverlay<OverlayItem> {
         dialog.show();
         return true;
     }
+
+
 
     @Override
     public void onDetach(MapView mapView) {

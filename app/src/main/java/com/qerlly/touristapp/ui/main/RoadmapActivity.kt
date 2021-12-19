@@ -2,6 +2,7 @@ package com.qerlly.touristapp.ui.main
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
@@ -10,7 +11,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -20,7 +20,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.qerlly.touristapp.BuildConfig
 import com.qerlly.touristapp.R
@@ -38,8 +37,16 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapController
 import org.osmdroid.views.overlay.IconOverlay
 import org.osmdroid.views.overlay.OverlayItem
-import timber.log.Timber
 import javax.inject.Inject
+import androidx.appcompat.widget.Toolbar
+import android.location.LocationListener
+import android.location.LocationManager
+import timber.log.Timber
+import android.location.Criteria
+
+
+
+
 
 @AndroidEntryPoint
 class RoadmapActivity : AppCompatActivity(), LocationListener {
@@ -47,12 +54,15 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
     @Inject
     lateinit var authService: UserAuthService
 
+    private var locationManager: LocationManager? = null
+    private var myLoc: Location? = null
+
     private val MY_PERMISSIONS_REQUEST_BACKGROUND_LOCATION: Int = 1
     private val MY_PERMISSIONS_REQUEST_LOCATION: Int = 0
     private val MIN_SEC: Long = 5L
     private val MIN_DIST: Float = 3.0f
-    lateinit var mgr: LocationManager
-    private lateinit var criteria: Criteria
+    var mgr: LocationManager? = null
+    private var criteria: Criteria? = null
     private val viewModel: MainActivityViewModel by viewModels()
 
     private lateinit var binding: ActivityRoadmapBinding
@@ -60,17 +70,32 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
     private var pts: List<TourPoint>? = ArrayList()
     private var members: List<MemberPoint>? = ArrayList()
 
+    private var activityInitiated = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRoadmapBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setupActionBar()
+        initLocManager()
 
         val adapter = FaqListAdapter(viewModel::onCardClicked)
         val manager = LinearLayoutManager(this)
         binding.points.layoutManager = manager
         binding.points.adapter = adapter
 
-        viewModel.pointsNameDesc.onEach {
+        mapController = binding.mapView.controller as MapController
+        mapController!!.setZoom(15)
+
+        viewModel.localizationState
+            .filterNot { it }
+            .onEach { Toast.makeText(this, R.string.no_localization, Toast.LENGTH_LONG).show() }
+            .flowWithLifecycle(lifecycle).launchIn(lifecycleScope)
+
+        viewModel.pointsNameDesc.combine(viewModel.localizationState, ::Pair)
+            .filter { it.second }
+            .map { it.first }
+            .onEach {
             if (it == null) {
                 binding.points.visibility = View.GONE
             } else {
@@ -79,12 +104,17 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
             }
         }.flowWithLifecycle(lifecycle).launchIn(lifecycleScope)
 
-        viewModel.tourPoints.onEach {
+        viewModel.tourPoints.combine(viewModel.localizationState, ::Pair)
+            .filter { it.second }
+            .map { it.first }
+            .onEach {
             pts = it
             draw()
         }.flowWithLifecycle(lifecycle).launchIn(lifecycleScope)
 
-        viewModel.membersPoints
+        viewModel.membersPoints.combine(viewModel.localizationState, ::Pair)
+            .filter { it.second }
+            .map { it.first }
             .filterNotNull()
             .map { list ->
             list.filter { it.latitude.isNotEmpty() && it.longitude.isNotEmpty() }
@@ -93,7 +123,41 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
             draw()
         }.flowWithLifecycle(lifecycle).launchIn(lifecycleScope)
 
-        prepareLoc()
+        viewModel.localizationState
+            .filter { it }
+            .onEach { prepareLoc() }
+            .flowWithLifecycle(lifecycle).launchIn(lifecycleScope)
+    }
+
+    private fun initLocManager() {
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            myLoc = locationManager!!.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            myLoc?.let {
+                viewModel.updateLocation(it.latitude.toString(), it.longitude.toString())
+            }
+            locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, this)
+        }
+    }
+
+    private fun setupActionBar() {
+        val toolbar: Toolbar = binding.toolbar
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true);
+        supportActionBar?.setDisplayShowHomeEnabled(true);
+        supportActionBar?.setTitle(R.string.roadmap)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun draw(){
@@ -111,15 +175,16 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
                 drawable = resources.getDrawable(R.drawable.ic_baseline_location_on_24_red)
             } else if (it.email == authService.userEmail) {
                 drawable = resources.getDrawable(R.drawable.ic_baseline_location_on_24_green)
-                mapController!!.setCenter(GeoPoint(it.latitude.toDouble(), it.longitude.toDouble()))
             }
             icon.set(GeoPoint(it.latitude.toDouble(), it.longitude.toDouble()), drawable)
             binding.mapView.overlays?.add(icon)
         }
     }
 
-    override fun onLocationChanged(location: Location) =
+    override fun onLocationChanged(location: Location) {
+        Timber.tag("ZXC").i("Location changed")
         viewModel.updateLocation(location.latitude.toString(), location.longitude.toString())
+    }
 
     private fun prepareLoc() {
         mgr = getSystemService(LOCATION_SERVICE) as LocationManager
@@ -143,23 +208,30 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+            locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, this)
             draw()
         } else {
             requireGps()
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun drawPointsOnMap() {
         Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
         binding.mapView.setBuiltInZoomControls(true)
         binding.mapView.setMultiTouchControls(true)
-        mapController = binding.mapView.controller as MapController
-        mapController!!.setZoom(15)
 
         pts?.forEach { point ->
-            val itemizedOverlay = MyOwnItemizedOverlay(
-                this@RoadmapActivity,
-                listOf(OverlayItem(point.description, point.title, object : IGeoPoint {
+            if(!activityInitiated) {
+                mapController!!.setCenter(
+                    GeoPoint(
+                        point.latitude.toDouble(),
+                        point.longitude.toDouble()
+                    )
+                )
+                activityInitiated = true
+            }
+            val item = OverlayItem("${point.id}. ${point.title}", "${point.description}\t${point.isDone}", object : IGeoPoint {
                     override fun getLatitudeE6(): Int {
                         return 0
                     }
@@ -175,8 +247,13 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
                     override fun getLongitude(): Double {
                         return point.longitude.toDouble()
                     }
-                })
-                )
+                }
+            )
+            val resourceId = resources.getIdentifier("${point.isDone}${point.id}", "drawable", this.packageName)
+            item.setMarker(resources.getDrawable(resourceId))
+            val itemizedOverlay = MyOwnItemizedOverlay(
+                this@RoadmapActivity,
+                listOf(item)
             )
             binding.mapView.overlays.add(itemizedOverlay)
         }
@@ -184,15 +261,16 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
 
     override fun onPause() {
         super.onPause()
-        mgr.removeUpdates(this)
+        locationManager?.removeUpdates((this as LocationListener))
+        mgr?.removeUpdates(this)
     }
 
     private fun setUpGPS() {
         criteria = Criteria()
-        criteria.accuracy = Criteria.ACCURACY_FINE
-        val providers = mgr.getProviders(criteria, true)
-        if (providers.size == 0) return
-        val preffered = providers[0]
+        criteria?.accuracy = Criteria.ACCURACY_FINE
+        val providers = mgr?.getProviders(criteria!!, false)
+        if (providers?.size == 0) return
+        val preffered = providers?.get(0)
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -203,7 +281,7 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
         ) {
             return
         }
-        mgr.requestLocationUpdates(preffered, MIN_SEC * 1000, MIN_DIST, this)
+        mgr?.requestLocationUpdates(preffered!!, MIN_SEC * 1000, MIN_DIST, this)
     }
 
     private fun requireGps() {
