@@ -87,13 +87,14 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
         //initObservers() //todo send location to the viewModel
         viewModel.tourPoints.onEach {
             pts = it
-            drawPointsOnMap()
+            draw()
         }.flowWithLifecycle(lifecycle)
             .launchIn(lifecycleScope)
 
         viewModel.membersPoints.onEach {
-            //members = it
-            drawMembersOnMap(it)
+            members = it
+            draw()
+
         }.flowWithLifecycle(lifecycle)
             .launchIn(lifecycleScope)
 
@@ -101,8 +102,14 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
         //navController.navigate(R.id.userLocationsFragment)//todo remove after testing
     }
 
-    private fun drawMembersOnMap(userLocs: List<MemberPoint>?){
-        userLocs?.forEach{
+    fun draw(){
+        binding?.mapView!!.overlays.clear()
+        drawMembersOnMap()
+        drawPointsOnMap()
+    }
+
+    private fun drawMembersOnMap(){
+        members?.forEach{
             val icon = IconOverlay()
             var drawable: Drawable = resources.getDrawable(R.drawable.ic_baseline_location_on_24_black)
             icon.set(GeoPoint(it.latitude.toDouble(), it.longitude.toDouble()), drawable)
@@ -125,7 +132,8 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
 
     override fun onLocationChanged(location: Location) {
         /*viewModel.currentPointLatLong.value = Pair(location.latitude, location.longitude)*/
-        Log.d(TAG, location.latitude.toString() + " " + location.longitude)
+        viewModel.updateLocation(location.latitude.toString(), location.longitude.toString())
+        //Log.d(TAG, location.latitude.toString() + " " + location.longitude)
     }
 
     private fun prepareLoc() {
@@ -133,6 +141,7 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController*/
         mgr = getSystemService(LOCATION_SERVICE) as LocationManager
+        setUpGPS()
         /*navController.navigate(R.id.navigation_roadmap)*/
     }
 
@@ -153,7 +162,7 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            drawPointsOnMap()
+            //draw()
         } else {
             requireGps()
         }
@@ -165,7 +174,7 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
         binding!!.mapView.setMultiTouchControls(true)
         mapController = binding!!.mapView.controller as MapController
         mapController!!.setZoom(15)
-        binding?.mapView!!.overlays.clear()
+
         pts?.forEach { point ->
             run {
                 mapController?.setCenter(

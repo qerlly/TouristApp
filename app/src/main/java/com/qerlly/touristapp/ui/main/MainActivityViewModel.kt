@@ -9,13 +9,14 @@ import com.qerlly.touristapp.model.MemberPoint
 import com.qerlly.touristapp.model.NewModel
 import com.qerlly.touristapp.model.TourPoint
 import com.qerlly.touristapp.repositories.TourRepository
+import com.qerlly.touristapp.repositories.UserSettingsRepository
 import com.qerlly.touristapp.ui.main.widgets.CloseOpenCardModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(tourRepository: TourRepository) : ViewModel(){
+class MainActivityViewModel @Inject constructor(tourRepository: TourRepository, private val userSettingsRepository: UserSettingsRepository) : ViewModel(){
     /*val currentPointLatLong: MutableLiveData<Pair<Double, Double>> = MutableLiveData()
 
     fun sendCurrentLocation(latLong: Pair<Double, Double> ){
@@ -31,6 +32,10 @@ class MainActivityViewModel @Inject constructor(tourRepository: TourRepository) 
                 CloseOpenCardModel(CloseOpenModel.new(tourPoint), opened)
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+    fun updateLocation(lat: String, long: String){
+        userSettingsRepository.updateUserLocation(lat, long)
+    }
 
     val tourPoints: StateFlow<List<TourPoint>?> =
         tourRepository.getTourPoints().stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
