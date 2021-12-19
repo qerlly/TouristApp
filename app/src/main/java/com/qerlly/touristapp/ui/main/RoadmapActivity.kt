@@ -3,37 +3,39 @@ package com.qerlly.touristapp.ui.main
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Point
-import android.location.Criteria
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
+import android.graphics.drawable.Drawable
+import android.location.*
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import com.qerlly.touristapp.BuildConfig
 import com.qerlly.touristapp.R
 import com.qerlly.touristapp.databinding.ActivityRoadmapBinding
+import com.qerlly.touristapp.model.MemberPoint
 import com.qerlly.touristapp.model.TourPoint
 import com.qerlly.touristapp.model.map.MyOwnItemizedOverlay
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.osmdroid.api.IGeoPoint
+import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapController
+import org.osmdroid.views.overlay.IconOverlay
 import org.osmdroid.views.overlay.OverlayItem
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RoadmapActivity : AppCompatActivity(), LocationListener {
@@ -49,26 +51,62 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
 
     private lateinit var binding: ActivityRoadmapBinding
     private var mapController: MapController? = null
-    private val pts: MutableList<TourPoint> = ArrayList()
+    private var pts: List<TourPoint>? = ArrayList()
+    private var members: List<MemberPoint>? = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRoadmapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        /*val adapter = FaqListAdapter(viewModel::onCardClicked)
+        val manager = LinearLayoutManager(requireContext())
+        _bind?.points?.setLayoutManager(manager)
+        _bind?.points?.adapter = adapter*/
+        /*viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)*/
         /*setContentView(R.layout.activity_main)*/
-        initObservers()
+        //initObservers() //todo send location to the viewModel
+        viewModel.tourPoints.onEach {
+            pts = it
+            drawPointsOnMap()
+        }.flowWithLifecycle(lifecycle)
+            .launchIn(lifecycleScope)
+
+        viewModel.membersPoints.onEach {
+            //members = it
+            drawMembersOnMap(it)
+        }.flowWithLifecycle(lifecycle)
+            .launchIn(lifecycleScope)
+
         prepareLoc()
         //navController.navigate(R.id.userLocationsFragment)//todo remove after testing
     }
 
+    private fun drawMembersOnMap(userLocs: List<MemberPoint>?){
+        userLocs?.forEach{
+            val icon = IconOverlay()
+            var drawable: Drawable = resources.getDrawable(R.drawable.ic_baseline_location_on_24_black)
+            icon.set(GeoPoint(it.latitude.toDouble(), it.longitude.toDouble()), drawable)
+            /*var drawable: Drawable = resources.getDrawable(R.drawable.ic_baseline_location_on_24_black)
+            if (it.){
+                drawable = resources.getDrawable(R.drawable.ic_baseline_location_on_24_red)
+            } else if (it.ifSelfLoc) {
+                drawable = resources.getDrawable(R.drawable.ic_baseline_location_on_24_green)
+            }*/
+            binding?.mapView?.overlays?.add(icon)
+            /*if (it.ifSelfLoc) {
+                mapController!!.setCenter(GeoPoint(it.lat, it.long))
+            }*/
+        }
+    }
+
     private fun initObservers() {
-        viewModel.currentPointLatLong.observe(this, viewModel::sendCurrentLocation)
+        /*viewModel.currentPointLatLong.observe(this, viewModel::sendCurrentLocation)*/
     }
 
     override fun onLocationChanged(location: Location) {
-        viewModel.currentPointLatLong.value = Pair(location.latitude, location.longitude)
-        /*Log.d(TAG, location.latitude.toString() + " " + location.longitude)*/
+        /*viewModel.currentPointLatLong.value = Pair(location.latitude, location.longitude)*/
+        Log.d(TAG, location.latitude.toString() + " " + location.longitude)
     }
 
     private fun prepareLoc() {
@@ -103,12 +141,20 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
     }
 
     private fun drawPointsOnMap() {
+        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID)
         binding!!.mapView.setBuiltInZoomControls(true)
         binding!!.mapView.setMultiTouchControls(true)
         mapController = binding!!.mapView.controller as MapController
-        mapController!!.setZoom(19)
-        pts.forEach { point ->
+        mapController!!.setZoom(15)
+        binding?.mapView!!.overlays.clear()
+        pts?.forEach { point ->
             run {
+                mapController?.setCenter(
+                    GeoPoint(
+                        point.latitude.toDouble(),
+                        point.longitude.toDouble()
+                    )
+                )
                 val itemizedOverlay = MyOwnItemizedOverlay(
                     this@RoadmapActivity,
                     listOf(OverlayItem(point.description, point.title, object : IGeoPoint {
@@ -147,7 +193,7 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
             }
         }
         //
-    // mapController!!.setCenter(GeoPoint(pts.get(0).latitude.toDouble(), pts.get(0).longitude.toDouble()))
+        // mapController!!.setCenter(GeoPoint(pts.get(0).latitude.toDouble(), pts.get(0).longitude.toDouble()))
     }
 
     override fun onPause() {
@@ -368,5 +414,9 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
                 return
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }

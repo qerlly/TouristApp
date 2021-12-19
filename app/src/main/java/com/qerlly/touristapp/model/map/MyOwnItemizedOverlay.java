@@ -44,4 +44,10 @@ public class MyOwnItemizedOverlay extends ItemizedIconOverlay<OverlayItem> {
         dialog.show();
         return true;
     }
+
+    @Override
+    public void onDetach(MapView mapView) {
+        mItemList = null;
+        super.onDetach(mapView);
+    }
 }
