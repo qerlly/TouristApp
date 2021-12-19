@@ -1,6 +1,7 @@
 package com.qerlly.touristapp.ui.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
@@ -16,9 +17,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -29,26 +28,29 @@ import com.qerlly.touristapp.databinding.ActivityRoadmapBinding
 import com.qerlly.touristapp.model.MemberPoint
 import com.qerlly.touristapp.model.TourPoint
 import com.qerlly.touristapp.model.map.MyOwnItemizedOverlay
+import com.qerlly.touristapp.services.UserAuthService
 import com.qerlly.touristapp.ui.main.adapters.FaqListAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import org.osmdroid.api.IGeoPoint
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapController
 import org.osmdroid.views.overlay.IconOverlay
 import org.osmdroid.views.overlay.OverlayItem
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class RoadmapActivity : AppCompatActivity(), LocationListener {
+
+    @Inject
+    lateinit var authService: UserAuthService
+
     private val MY_PERMISSIONS_REQUEST_BACKGROUND_LOCATION: Int = 1
     private val MY_PERMISSIONS_REQUEST_LOCATION: Int = 0
-    private val MIN_SEC: Long = 5L;//SECS
-    private val MIN_DIST: Float = 3.0f;//METERS
-    private val TAG = "MainActivity"
-    private lateinit var navController: NavController
+    private val MIN_SEC: Long = 5L
+    private val MIN_DIST: Float = 3.0f
     lateinit var mgr: LocationManager
     private lateinit var criteria: Criteria
     private val viewModel: MainActivityViewModel by viewModels()
@@ -65,84 +67,63 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
 
         val adapter = FaqListAdapter(viewModel::onCardClicked)
         val manager = LinearLayoutManager(this)
-        binding?.points?.setLayoutManager(manager)
-        binding?.points?.adapter = adapter
+        binding.points.layoutManager = manager
+        binding.points.adapter = adapter
 
         viewModel.pointsNameDesc.onEach {
             if (it == null) {
-                binding?.points?.visibility = View.GONE
+                binding.points.visibility = View.GONE
             } else {
-                binding.points?.visibility = View.VISIBLE
+                binding.points.visibility = View.VISIBLE
                 adapter.submitList(it)
             }
-        }.flowWithLifecycle(lifecycle)
-            .launchIn(lifecycleScope)
+        }.flowWithLifecycle(lifecycle).launchIn(lifecycleScope)
 
-        /*val adapter = FaqListAdapter(viewModel::onCardClicked)
-        val manager = LinearLayoutManager(requireContext())
-        _bind?.points?.setLayoutManager(manager)
-        _bind?.points?.adapter = adapter*/
-        /*viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)*/
-        /*setContentView(R.layout.activity_main)*/
-        //initObservers() //todo send location to the viewModel
         viewModel.tourPoints.onEach {
             pts = it
             draw()
-        }.flowWithLifecycle(lifecycle)
-            .launchIn(lifecycleScope)
+        }.flowWithLifecycle(lifecycle).launchIn(lifecycleScope)
 
-        viewModel.membersPoints.onEach {
+        viewModel.membersPoints
+            .filterNotNull()
+            .map { list ->
+            list.filter { it.latitude.isNotEmpty() && it.longitude.isNotEmpty() }
+        }.onEach {
             members = it
             draw()
-
-        }.flowWithLifecycle(lifecycle)
-            .launchIn(lifecycleScope)
+        }.flowWithLifecycle(lifecycle).launchIn(lifecycleScope)
 
         prepareLoc()
-        //navController.navigate(R.id.userLocationsFragment)//todo remove after testing
     }
 
-    fun draw(){
-        binding?.mapView!!.overlays.clear()
+    private fun draw(){
+        binding.mapView.overlays.clear()
         drawMembersOnMap()
         drawPointsOnMap()
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun drawMembersOnMap(){
         members?.forEach{
             val icon = IconOverlay()
             var drawable: Drawable = resources.getDrawable(R.drawable.ic_baseline_location_on_24_black)
-            icon.set(GeoPoint(it.latitude.toDouble(), it.longitude.toDouble()), drawable)
-            /*var drawable: Drawable = resources.getDrawable(R.drawable.ic_baseline_location_on_24_black)
-            if (it.){
+            if (it.email.endsWith("@firma.gid.com")){
                 drawable = resources.getDrawable(R.drawable.ic_baseline_location_on_24_red)
-            } else if (it.ifSelfLoc) {
+            } else if (it.email == authService.userEmail) {
                 drawable = resources.getDrawable(R.drawable.ic_baseline_location_on_24_green)
-            }*/
-            binding?.mapView?.overlays?.add(icon)
-            /*if (it.ifSelfLoc) {
-                mapController!!.setCenter(GeoPoint(it.lat, it.long))
-            }*/
+                mapController!!.setCenter(GeoPoint(it.latitude.toDouble(), it.longitude.toDouble()))
+            }
+            icon.set(GeoPoint(it.latitude.toDouble(), it.longitude.toDouble()), drawable)
+            binding.mapView.overlays?.add(icon)
         }
     }
 
-    private fun initObservers() {
-        /*viewModel.currentPointLatLong.observe(this, viewModel::sendCurrentLocation)*/
-    }
-
-    override fun onLocationChanged(location: Location) {
-        /*viewModel.currentPointLatLong.value = Pair(location.latitude, location.longitude)*/
+    override fun onLocationChanged(location: Location) =
         viewModel.updateLocation(location.latitude.toString(), location.longitude.toString())
-        //Log.d(TAG, location.latitude.toString() + " " + location.longitude)
-    }
 
     private fun prepareLoc() {
-        /*val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController*/
         mgr = getSystemService(LOCATION_SERVICE) as LocationManager
         setUpGPS()
-        /*navController.navigate(R.id.navigation_roadmap)*/
     }
 
     override fun onResume() {
@@ -162,66 +143,43 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            //draw()
+            draw()
         } else {
             requireGps()
         }
     }
 
     private fun drawPointsOnMap() {
-        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID)
-        binding!!.mapView.setBuiltInZoomControls(true)
-        binding!!.mapView.setMultiTouchControls(true)
-        mapController = binding!!.mapView.controller as MapController
+        Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
+        binding.mapView.setBuiltInZoomControls(true)
+        binding.mapView.setMultiTouchControls(true)
+        mapController = binding.mapView.controller as MapController
         mapController!!.setZoom(15)
 
         pts?.forEach { point ->
-            run {
-                mapController?.setCenter(
-                    GeoPoint(
-                        point.latitude.toDouble(),
-                        point.longitude.toDouble()
-                    )
-                )
-                val itemizedOverlay = MyOwnItemizedOverlay(
-                    this@RoadmapActivity,
-                    listOf(OverlayItem(point.description, point.title, object : IGeoPoint {
-                        override fun getLatitudeE6(): Int {
-                            return 0;
-                        }
-
-                        override fun getLongitudeE6(): Int {
-                            return 0;
-                        }
-
-                        override fun getLatitude(): Double {
-                            return point.latitude.toDouble()
-                        }
-
-                        override fun getLongitude(): Double {
-                            return point.longitude.toDouble()
-                        }
+            val itemizedOverlay = MyOwnItemizedOverlay(
+                this@RoadmapActivity,
+                listOf(OverlayItem(point.description, point.title, object : IGeoPoint {
+                    override fun getLatitudeE6(): Int {
+                        return 0
                     }
-                    )
-                    )
-                )
-                binding?.mapView!!.overlays.add(itemizedOverlay)
-                /*val icon1 = ItemizedIconOverlay(listOf(OverlayItem(point.textOnClosed, point.textOnClosed, object: IGeoPoint{
+
+                    override fun getLongitudeE6(): Int {
+                        return 0
+                    }
+
                     override fun getLatitude(): Double {
-                        return point.lat
+                        return point.latitude.toDouble()
                     }
+
                     override fun getLongitude(): Double {
-                        return point,
+                        return point.longitude.toDouble()
                     }
-                })))//
-                val icon = IconOverlay()
-                icon.set(GeoPoint(point.latitude, point.longitude), resources.getDrawable(R.drawable.ic_baseline_location_on_24))
-                _bind?.mapView!!.overlays.add(icon)*/
-                //ItemizedIconOverlay
-            }
+                })
+                )
+            )
+            binding.mapView.overlays.add(itemizedOverlay)
         }
-        //
-        // mapController!!.setCenter(GeoPoint(pts.get(0).latitude.toDouble(), pts.get(0).longitude.toDouble()))
     }
 
     override fun onPause() {
@@ -233,11 +191,8 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
         criteria = Criteria()
         criteria.accuracy = Criteria.ACCURACY_FINE
         val providers = mgr.getProviders(criteria, true)
-        if (providers.size == 0) {
-            Log.d(TAG, "Could not open GPS service")
-            return
-        }
-        val preffered = providers.get(0)
+        if (providers.size == 0) return
+        val preffered = providers[0]
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -246,13 +201,6 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return
         }
         mgr.requestLocationUpdates(preffered, MIN_SEC * 1000, MIN_DIST, this)
@@ -281,28 +229,22 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this,
                     Manifest.permission.ACCESS_FINE_LOCATION
                 )
             ) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
                 AlertDialog.Builder(this)
                     .setTitle("Location Permission Needed")
                     .setMessage("This app needs the Location permission, please accept to use location functionality")
                     .setPositiveButton(
                         "OK"
                     ) { _, _ ->
-                        //Prompt the user once explanation has been shown
                         requestLocationPermission()
                     }
                     .create()
                     .show()
             } else {
-                // No explanation needed, we can request the permission.
                 requestLocationPermission()
             }
         } else {
@@ -331,16 +273,12 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
                     Manifest.permission.ACCESS_BACKGROUND_LOCATION
                 )
             ) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
                 AlertDialog.Builder(this)
                     .setTitle("Location Permission Needed")
                     .setMessage("This app needs the background location permission, please accept to use location functionality")
                     .setPositiveButton(
                         "OK"
                     ) { _, _ ->
-                        //Prompt the user once explanation has been shown
                         requestBackgroundLocationPermission()
                     }
                     .create()
@@ -378,28 +316,17 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_LOCATION -> {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // location-related task you need to do.
                     if (ContextCompat.checkSelfPermission(
                             this,
                             Manifest.permission.ACCESS_FINE_LOCATION
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
-                        // Now check background location
                         checkBackgroundLocation()
                     }
 
                 } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                     Toast.makeText(this, "location permission denied", Toast.LENGTH_LONG).show()
-
-                    // Check if we are in a state where the user has denied the permission and
-                    // selected Don't ask again
                     if (!ActivityCompat.shouldShowRequestPermissionRationale(
                             this,
                             Manifest.permission.ACCESS_FINE_LOCATION
@@ -416,11 +343,7 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
                 return
             }
             MY_PERMISSIONS_REQUEST_BACKGROUND_LOCATION -> {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // location-related task you need to do.
                     if (ContextCompat.checkSelfPermission(
                             this,
                             Manifest.permission.ACCESS_FINE_LOCATION
@@ -434,17 +357,11 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
                         ).show()
                     }
                 } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                     Toast.makeText(this, "background locatin permission denied", Toast.LENGTH_LONG)
                         .show()
                 }
                 return
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 }

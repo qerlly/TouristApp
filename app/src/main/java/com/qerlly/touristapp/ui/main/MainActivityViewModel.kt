@@ -1,27 +1,26 @@
 package com.qerlly.touristapp.ui.main
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.qerlly.touristapp.model.CloseOpenModel
 import com.qerlly.touristapp.model.MemberPoint
-import com.qerlly.touristapp.model.NewModel
 import com.qerlly.touristapp.model.TourPoint
 import com.qerlly.touristapp.repositories.TourRepository
 import com.qerlly.touristapp.repositories.UserSettingsRepository
+import com.qerlly.touristapp.services.SettingsService
 import com.qerlly.touristapp.ui.main.widgets.CloseOpenCardModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(tourRepository: TourRepository, private val userSettingsRepository: UserSettingsRepository) : ViewModel(){
-    /*val currentPointLatLong: MutableLiveData<Pair<Double, Double>> = MutableLiveData()
-
-    fun sendCurrentLocation(latLong: Pair<Double, Double> ){
-        Log.d("MainActivityViewModel", "got latLong");
-    }*/
+class MainActivityViewModel @Inject constructor(
+    tourRepository: TourRepository,
+    private val userSettingsRepository: UserSettingsRepository,
+    private val settingsService: SettingsService
+) : ViewModel() {
 
     private val openedCardIds: MutableStateFlow<Set<String>> = MutableStateFlow(setOf())
 
@@ -33,8 +32,12 @@ class MainActivityViewModel @Inject constructor(tourRepository: TourRepository, 
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    fun updateLocation(lat: String, long: String){
-        userSettingsRepository.updateUserLocation(lat, long)
+    fun updateLocation(lat: String, long: String) {
+        viewModelScope.launch {
+            val localization = settingsService.getUserLocalization().first()
+            if (localization) userSettingsRepository.updateUserLocation(lat, long)
+            else userSettingsRepository.updateUserLocation("", "")
+        }
     }
 
     val tourPoints: StateFlow<List<TourPoint>?> =
