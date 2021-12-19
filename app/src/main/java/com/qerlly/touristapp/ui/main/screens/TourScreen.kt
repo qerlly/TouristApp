@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -40,7 +41,7 @@ fun TourScreen() = MdcTheme {
     val news = viewModel.tourNews.collectAsState()
 
     Column(
-        Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+        Modifier.fillMaxWidth().fillMaxHeight(0.9f).verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -95,9 +96,21 @@ fun TourCardInfo(title: String, tour: TourModel?) {
             }
             AnimatedVisibility(visible = visibility.value) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(text = tour?.description ?: "", fontSize = 14.sp)
-                    Text(text = tour?.time ?: "", fontSize = 14.sp)
-                    Text(text = tour?.gid ?: "", fontSize = 14.sp)
+                    Text(text = tour?.description ?: "", fontSize = 14.sp, modifier = Modifier.fillMaxSize(), textAlign = TextAlign.Center)
+                    Text(
+                        text = tour?.time ?: "",
+                        fontSize = 14.sp,
+                        modifier = Modifier.fillMaxSize().padding(top = 16.dp),
+                        textAlign = TextAlign.Center,
+                        fontStyle = FontStyle.Italic
+                    )
+                    Text(
+                        text = tour?.gid ?: "",
+                        fontSize = 14.sp,
+                        modifier = Modifier.fillMaxSize(),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
         }
@@ -111,9 +124,7 @@ fun TourCard(title: String, info: State<List<NewModel>?>) {
     val visibility = remember { mutableStateOf(false) }
 
     Card(
-        modifier = Modifier
-            .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-            .fillMaxWidth(),
+        modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp).fillMaxWidth(),
         shape = RoundedCornerShape(4.dp),
         elevation = 4.dp,
         onClick = { visibility.value = !visibility.value }
@@ -136,7 +147,12 @@ fun TourCard(title: String, info: State<List<NewModel>?>) {
             AnimatedVisibility(visible = visibility.value) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     info.value?.forEach {
-                        Text(text = it.info, fontSize = 14.sp, fontWeight = if (it.priority) FontWeight.Bold else FontWeight.Normal)
+                        Text(
+                            modifier = Modifier.fillMaxWidth().padding(4.dp),
+                            text = it.info,
+                            fontSize = 14.sp,
+                            fontWeight = if (it.priority) FontWeight.Bold else FontWeight.Normal
+                        )
                     }
                 }
             }
