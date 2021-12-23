@@ -18,11 +18,11 @@ import com.qerlly.touristapp.services.SettingsService
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import android.graphics.Bitmap
+import android.location.LocationManager
 import java.io.ByteArrayOutputStream
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,7 +38,6 @@ import com.qerlly.touristapp.services.UserAuthService
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
@@ -55,6 +54,9 @@ class MainActivity: AppCompatActivity() {
 
     @Inject
     lateinit var userAuthService: UserAuthService
+
+    @Inject
+    lateinit var locationManager: LocationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,7 +127,7 @@ class MainActivity: AppCompatActivity() {
                     content = { MainNavGraph(navController, isJoined, this@MainActivity::dispatchTakePictureIntent, isGid) },
                     bottomBar = {
                         if (currentRoute != Destinations.USER_SCREEN && currentRoute != Destinations.FAQ_SCREEN)
-                            MainBottomBar(navController, this@MainActivity::startRoadmapActivity, isJoined)
+                            MainBottomBar(navController, this@MainActivity::startRoadmapActivity, isJoined, locationManager)
                     }
                 )
             }

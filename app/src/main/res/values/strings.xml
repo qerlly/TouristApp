@@ -49,5 +49,6 @@
     <string name="tour_adding">Do you want to join to this tour?</string>
     <string name="no_text">The input field is empty</string>
     <string name="no_localization">Enable localization, to continue</string>
+    <string name="localiz">turn on location</string>
 
 </resources>
