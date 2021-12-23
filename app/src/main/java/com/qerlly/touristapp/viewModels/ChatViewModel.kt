@@ -27,7 +27,10 @@ class ChatViewModel @Inject constructor(
 
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 
-    val messages = MutableStateFlow<MutableList<MessageModel>?>(null)
+    private val _messages = MutableStateFlow<MutableList<MessageModel>?>(null)
+
+    val messages: StateFlow<List<MessageModel>?> =
+        _messages.map { it?.distinct() }.stateIn(scope, SharingStarted.Eagerly, null)
 
     private var tourId: String? = null
 
@@ -39,7 +42,7 @@ class ChatViewModel @Inject constructor(
 
             root = firebaseDatabase.reference.child(tourId!!)
 
-            messages.value = mutableListOf()
+            _messages.value = mutableListOf()
 
             root!!.addChildEventListener(object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -92,7 +95,7 @@ class ChatViewModel @Inject constructor(
             val message: String = (iterator.next() as DataSnapshot).value.toString()
             val messageChunks = message.split(" :?: ")
 
-            messages.value?.forEach {
+            _messages.value?.forEach {
                 newList.add(it)
             }
             newList.add(
@@ -105,6 +108,6 @@ class ChatViewModel @Inject constructor(
                 ),
             )
         }
-        messages.value = newList
+        _messages.value = newList
     }
 }
