@@ -74,12 +74,46 @@ class TourRepository @Inject constructor(
                     val title = document.getString("title") ?: return@mapNotNull null
                     val description = document.getString("description") ?: return@mapNotNull null
                     val image = document.getString("image") ?: return@mapNotNull null
-                    val isDone = document.getBoolean("isDone") ?: return@mapNotNull null
+                    val status = document.getLong("status") ?: return@mapNotNull null
                     val latitude = document.getString("latitude") ?: return@mapNotNull null
                     val longitude = document.getString("longitude") ?: return@mapNotNull null
-                    TourPoint(id, isDone, latitude, longitude, title, description, image)
+                    TourPoint(id, status, latitude, longitude, title, description, image)
                 }
             }
+    }
+
+    private fun getTourPoint(tour: String, number: String): Flow<TourPoint> = firestore
+            .document("tours/$tour/points/$number")
+            .asFlow()
+            .mapNotNull { document ->
+                    val id = document.id
+                    val title = document.getString("title") ?: return@mapNotNull null
+                    val description = document.getString("description") ?: return@mapNotNull null
+                    val image = document.getString("image") ?: return@mapNotNull null
+                    val status = document.getLong("status") ?: return@mapNotNull null
+                    val latitude = document.getString("latitude") ?: return@mapNotNull null
+                    val longitude = document.getString("longitude") ?: return@mapNotNull null
+                    TourPoint(id, status, latitude, longitude, title, description, image)
+            }
+
+    fun setPointCurrent(point: TourPoint) {
+        val tourId: String
+        runBlocking { tourId = settingsService.getTour().first() }
+        val dataToSave: Map<String, Any?> =
+            mapOf("title" to point.title, "description" to point.description,
+                "image" to point.image, "latitude" to point.latitude, "longitude" to point.longitude, "status" to 1L)
+        val doc: DocumentReference = firestore.document("tours/$tourId/points/${point.id}")
+        doc.set(dataToSave)
+    }
+
+    fun setPointPassed(point: TourPoint) {
+        val tourId: String
+        runBlocking { tourId = settingsService.getTour().first() }
+        val dataToSave: Map<String, Any?> =
+            mapOf("title" to point.title, "description" to point.description,
+                "image" to point.image, "latitude" to point.latitude, "longitude" to point.longitude, "status" to 2L)
+        val doc: DocumentReference = firestore.document("tours/$tourId/points/${point.id}")
+        doc.set(dataToSave)
     }
 
     fun getMembersPoints(): Flow<List<MemberPoint>> {

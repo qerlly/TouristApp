@@ -28,7 +28,11 @@ fun FaqItemBinding.bindTo(closeOpenCardModel: CloseOpenCardModel, onClick: (Clos
     faqCard.setOnClickListener {
         onClick(closeOpenCardModel)
     }
-    pointStatus.text = if (closeOpenCardModel.closeOpenModel.pointStatus) "Point is passed" else "Point is not passed"
+    pointStatus.text = when (closeOpenCardModel.closeOpenModel.pointStatus) {
+        2L -> "Point is passed"
+        1L -> "Point is current"
+        else -> "Point is not passed"
+    }
     faqItemAnswer.visibility = if (closeOpenCardModel.expanded) View.VISIBLE else View.GONE
     pointStatus.visibility = if (closeOpenCardModel.expanded) View.VISIBLE else View.GONE
     faqItemQuestion.text = closeOpenCardModel.closeOpenModel.textOnOpen

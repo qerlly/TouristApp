@@ -43,9 +43,8 @@ import android.location.LocationListener
 import android.location.LocationManager
 import timber.log.Timber
 import android.location.Criteria
-
-
-
+import com.qerlly.touristapp.repositories.TourRepository
+import org.slf4j.MarkerFactory.getMarker
 
 
 @AndroidEntryPoint
@@ -53,6 +52,9 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
 
     @Inject
     lateinit var authService: UserAuthService
+
+    @Inject
+    lateinit var tourRepository: TourRepository
 
     private var locationManager: LocationManager? = null
     private var myLoc: Location? = null
@@ -182,7 +184,6 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
     }
 
     override fun onLocationChanged(location: Location) {
-        Timber.tag("ZXC").i("Location changed")
         viewModel.updateLocation(location.latitude.toString(), location.longitude.toString())
     }
 
@@ -231,7 +232,7 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
                 )
                 activityInitiated = true
             }
-            val item = OverlayItem("${point.id}. ${point.title}", "${point.description}\t${point.isDone}", object : IGeoPoint {
+            val item = OverlayItem("${point.id}. ${point.title}", "${point.description}\t${point.status}\t${authService.userEmail}", object : IGeoPoint {
                     override fun getLatitudeE6(): Int {
                         return 0
                     }
@@ -249,14 +250,26 @@ class RoadmapActivity : AppCompatActivity(), LocationListener {
                     }
                 }
             )
-            val resourceId = resources.getIdentifier("${point.isDone}${point.id}", "drawable", this.packageName)
-            item.setMarker(resources.getDrawable(resourceId))
+            item.setMarker(getMarker(point))
             val itemizedOverlay = MyOwnItemizedOverlay(
                 this@RoadmapActivity,
+                tourRepository,
+                point,
                 listOf(item)
             )
             binding.mapView.overlays.add(itemizedOverlay)
         }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun getMarker(point: TourPoint): Drawable {
+        val prefix = when (point.status) {
+            2L -> "true"
+            1L -> "current"
+            else -> "false"
+        }
+        val resourceId = resources.getIdentifier("$prefix${point.id}", "drawable", this.packageName)
+        return resources.getDrawable(resourceId)
     }
 
     override fun onPause() {

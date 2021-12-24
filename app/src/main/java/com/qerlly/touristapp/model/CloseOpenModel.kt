@@ -5,9 +5,9 @@ class CloseOpenModel(
     var textOnOpen: String,
     var textOnClosed: String,
     var image: String,
-    var pointStatus: Boolean
+    var pointStatus: Long
 ){
     companion object {
-        fun new(tourPoint: TourPoint) = CloseOpenModel(tourPoint.id, tourPoint.title, tourPoint.description, tourPoint.image, tourPoint.isDone)
+        fun new(tourPoint: TourPoint) = CloseOpenModel(tourPoint.id, tourPoint.title, tourPoint.description, tourPoint.image, tourPoint.status)
     }
 }
